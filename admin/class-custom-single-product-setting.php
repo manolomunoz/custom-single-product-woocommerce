@@ -102,8 +102,15 @@ class CSPW_Settings {
 
 		add_settings_field(
 			'sku',
-			__( 'Quitar SKU del producto', 'sync-ecommerce-course' ),
+			__( 'No mostrar SKU del producto', 'sync-ecommerce-course' ),
 			array( $this, 'sku_callback' ),
+			'sync-ecommerce-course-admin',
+			'cspw_setting_section'
+		);
+		add_settings_field(
+			'categories',
+			__( 'No mostrar categorías del producto', 'sync-ecommerce-course' ),
+			array( $this, 'categories_callback' ),
 			'sync-ecommerce-course-admin',
 			'cspw_setting_section'
 		);
@@ -120,6 +127,7 @@ class CSPW_Settings {
 
 		$settings_keys = array(
 			'sku',
+			'categories',
 		);
 
 		foreach ( $settings_keys as $key ) {
@@ -149,8 +157,17 @@ class CSPW_Settings {
 		$settings = get_option( 'cspw_settings' );
 		
 		echo '<input type="checkbox" id="sku" name="cspw_settings[sku]" value="1"' . checked( 1, $settings['sku'], false ) . '/>';
+	}
+
+	/**
+	 * Call back for categories
+	 *
+	 * @return void
+	 */
+	public function categories_callback() {
+		$settings = get_option( 'cspw_settings' );
 		
-		
+		echo '<input type="checkbox" id="categories" name="cspw_settings[categories]" value="1"' . checked( 1, $settings['categories'], false ) . '/>';
 	}
 
 	/**
