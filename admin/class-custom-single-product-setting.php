@@ -114,6 +114,27 @@ class CSPW_Settings {
 			'sync-ecommerce-course-admin',
 			'cspw_setting_section'
 		);
+		add_settings_field(
+			'tab_description',
+			__( 'Descripción', 'sync-ecommerce-course' ),
+			array( $this, 'tab_description_callback' ),
+			'sync-ecommerce-course-admin',
+			'cspw_setting_section'
+		);
+		add_settings_field(
+			'tab_aditional',
+			__( 'Información adicional', 'sync-ecommerce-course' ),
+			array( $this, 'tab_aditional_callback' ),
+			'sync-ecommerce-course-admin',
+			'cspw_setting_section'
+		);
+		add_settings_field(
+			'tab_reviews',
+			__( 'Valoraciones', 'sync-ecommerce-course' ),
+			array( $this, 'tab_reviews_callback' ),
+			'sync-ecommerce-course-admin',
+			'cspw_setting_section'
+		);
 	}
 
 	/**
@@ -145,7 +166,7 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function cspw_section_info() {
-		esc_html_e( 'Elige la configuración para configurar la apariencia de los productos.', 'sync-ecommerce-course' );
+		esc_html_e( 'Configura la apariencia de las tablas.', 'sync-ecommerce-course' );
 	}
 
 	/**
@@ -168,6 +189,39 @@ class CSPW_Settings {
 		$settings = get_option( 'cspw_settings' );
 		
 		echo '<input type="checkbox" id="categories" name="cspw_settings[categories]" value="1"' . checked( 1, $settings['categories'], false ) . '/>';
+	}
+
+	/**
+	 * Call back for tab description
+	 *
+	 * @return void
+	 */
+	public function tab_description_callback() {
+		$settings = get_option( 'cspw_settings' );
+		
+		echo '<input type="checkbox" id="tab_description" name="cspw_settings[tab_description]" value="1"' . checked( 1, $settings['tab_description'], false ) . '/>';
+	}
+
+	/**
+	 * Call back for tab aditional
+	 *
+	 * @return void
+	 */
+	public function tab_aditional_callback() {
+		$settings = get_option( 'cspw_settings' );
+		
+		echo '<input type="checkbox" id="tab_aditional" name="cspw_settings[tab_aditional]" value="1"' . checked( 1, $settings['tab_aditional'], false ) . '/>';
+	}
+
+	/**
+	 * Call back for tab reviews
+	 *
+	 * @return void
+	 */
+	public function tab_reviews_callback() {
+		$settings = get_option( 'cspw_settings' );
+		
+		echo '<input type="checkbox" id="tab_reviews" name="cspw_settings[tab_reviews]" value="1"' . checked( 1, $settings['tab_reviews'], false ) . '/>';
 	}
 
 	/**
