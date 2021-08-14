@@ -25,7 +25,6 @@ defined( 'ABSPATH' ) || die( 'No script kiddies please!' );
 
 define( 'PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 
-//require_once PLUGIN_PATH . '/admin/class-custom-single-product-admin.php';
 require_once PLUGIN_PATH . '/admin/class-custom-single-product-setting.php';
 require_once PLUGIN_PATH . '/public/class-custom-single-product-public.php';
 
