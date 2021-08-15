@@ -69,6 +69,7 @@ class CSPW_Settings {
 		    
 			<h2 class="nav-tab-wrapper">
 				<a href="?page=<?php echo $_GET['page']; ?>&tab=settings" class="nav-tab <?php echo $active_tab == 'settings' ? 'nav-tab-active' : ''; ?>">Producto individual</a>
+				<a href="?page=<?php echo $_GET['page']; ?>&tab=product_positions" class="nav-tab <?php echo $active_tab == 'product_positions' ? 'nav-tab-active' : ''; ?>">Posiciones producto individual</a>
 				<a href="?page=<?php echo $_GET['page']; ?>&tab=products_settings" class="nav-tab <?php echo $active_tab == 'products_settings' ? 'nav-tab-active' : ''; ?>">Productos</a>
 			</h2>
 
@@ -77,6 +78,15 @@ class CSPW_Settings {
 					<?php
 					settings_fields( 'cspw_settings' );
 					do_settings_sections( 'cspw-general-settings' );
+					submit_button();
+					?>
+				</form>
+			<?php } ?>
+			<?php	if ( 'product_positions' === $active_tab ) { ?>
+				<form method="post" action="options.php">
+					<?php
+					settings_fields( 'cspw_settings' );
+					do_settings_sections( 'cspw-settings-product-positions' );
 					submit_button();
 					?>
 				</form>
@@ -107,7 +117,7 @@ class CSPW_Settings {
 			array( $this, 'sanitize_fields' )
 		);
 
-		// ****** PRODUCTO INDIVIDUAL ******
+		// ***************************************************** PRODUCTO INDIVIDUAL *****************************************************
 		add_settings_section(
 			'cspw_setting_section',
 			__( 'Configuración de la apariencia del producto', 'sync-ecommerce-course' ),
@@ -199,7 +209,7 @@ class CSPW_Settings {
 			'cspw_setting_section'
 		);
 
-		// ****** PRODUCTOS ******
+		// ***************************************************** PRODUCTOS *****************************************************
 		add_settings_section(
 			'cspw_setting_section_products',
 			__( 'Configuración de la apariencia de los productos', 'sync-ecommerce-course' ),
@@ -248,6 +258,22 @@ class CSPW_Settings {
 			'cspw-settings-products',
 			'cspw_setting_section_products'
 		);
+
+		// ***************************************************** PRODUCTO INDIVIDUAL POSITIONS *****************************************************
+		add_settings_section(
+			'cspw_setting_section_product_positions',
+			__( 'Configuración de la posición', 'sync-ecommerce-course' ),
+			array( $this, 'cspw_section_product_positions' ),
+			'cspw-settings-product-positions'
+		);
+		add_settings_field(
+			'custom_logo_add_cart_button',
+			__( 'Añadir logo al botón añadir al carrito (.png, .svg)', 'sync-ecommerce-course' ),
+			array( $this, 'custom_logo_add_cart_button_callback' ),
+			'cspw-settings-product-positions',
+			'cspw_setting_section_product_positions'
+		);
+
 	}
 
 	/**
@@ -279,6 +305,8 @@ class CSPW_Settings {
 			'loop_price',
 			'loop_image',
 			'loop_add_cart_button',
+			// PRODUCTO INDIVIDUAL POSICIÓN
+			'custom_logo_add_cart_button',
 
 		);
 
@@ -509,6 +537,28 @@ class CSPW_Settings {
 		echo '<input type="checkbox" id="cspw_loop_add_cart_button" name="cspw_settings[loop_add_cart_button]" value="1"' . checked( 1, $settings['loop_add_cart_button'], false ) . '/>';
 	}
 
+	/****************** PRODUCTO INDIVIDUAL POSICIÓN ******************/
+	/**
+	 * Info for holded automate section.
+	 *
+	 * @return void
+	 */
+	public function cspw_section_product_positions() {
+		esc_html_e( 'Configura la posición de los elementos en la página de producto.', 'sync-ecommerce-course' );
+	}
+
+	/**
+	 * Call back for custom_logo_add_cart_button
+	 *
+	 * @return void
+	 */
+	public function custom_logo_add_cart_button_callback() {
+		$settings = get_option( 'cspw_settings' );
+		?>
+		<input id="upload_image" type="text" size="36" name="ad_image" value=<?PHP echo get_option('ad_image'); ?> /> 
+		<input id="upload_image_button" class="button" type="button" value="Upload Menu" />
+		<?php
+	}
 
 	/**
 	 * Custom CSS for admin
@@ -519,7 +569,9 @@ class CSPW_Settings {
 		// Free Version.
 		echo '
 			<style>
-			
+			#custom_logo_add_cart_button {
+				width: 350px;
+			}
 			';
 		echo '</style>';
 	}

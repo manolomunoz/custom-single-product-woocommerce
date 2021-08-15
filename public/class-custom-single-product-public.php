@@ -19,6 +19,7 @@ add_action( 'get_header', 'cspw_custom_products_functions' );
 function cspw_custom_products_functions() {
 	$cspw_settings   = get_option( 'cspw_settings' );
 	if ( is_product() ) {
+		// ****************** MOSTRAR PRODUCTO ******************
 		$title           = isset( $cspw_settings['title'] ) ? $cspw_settings['title'] : 'true';
 		$show_sku        = isset( $cspw_settings['sku'] ) ? $cspw_settings['sku'] : 'true';
 		$categories      = isset( $cspw_settings['categories'] ) ? $cspw_settings['categories'] : 'true';
@@ -31,6 +32,12 @@ function cspw_custom_products_functions() {
 		$tab_reviews     = isset( $cspw_settings['tab_reviews'] ) ? $cspw_settings['tab_reviews'] : 'true';
 		$related_product = isset( $cspw_settings['related_product'] ) ? $cspw_settings['related_product'] : 'true';
 
+		// ****************** MOSTRAR PRODUCTO ******************
+		$custom_logo_add_cart_button = isset( $cspw_settings['custom_logo_add_cart_button'] ) ? $cspw_settings['custom_logo_add_cart_button'] : 'true';
+
+		if ( $custom_logo_add_cart_button != '' ) {
+			add_filter( 'woocommerce_product_single_add_to_cart_text','cspw_product_add_cart_button' );
+		}
 		if ( $title == 1 ) {
 			remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
 		}
@@ -56,7 +63,7 @@ function cspw_custom_products_functions() {
 			remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_price', 10 );
 		}
 		if ( $add_cart_button == 1 ) {
-			remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30);
+			remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
 		}
 		if ( $image == 1 ) {
 			remove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20 );
@@ -92,9 +99,6 @@ function cspw_custom_products_functions() {
 		if ( $loop_add_cart_button == 1 ) {
 			remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart' );
 		}
-		
-		
-		
 		
 	}
 }
@@ -140,4 +144,18 @@ function cspw_remove_product_tab_aditional( $tabs ) {
 function cspw_remove_product_tab_reviews( $tabs ) {
 	unset( $tabs['reviews'] );
 	return $tabs;
+}
+
+/**
+ * Custom add to cart button
+ *
+ * @return void
+ */
+function cspw_product_add_cart_button() {
+	
+
+	$cspw_settings   = get_option( 'cspw_settings' );
+	
+	
+	return $_FILES[$cspw_settings['custom_logo_add_cart_button']];
 }
