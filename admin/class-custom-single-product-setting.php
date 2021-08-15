@@ -99,7 +99,6 @@ class CSPW_Settings {
 			array( $this, 'cspw_section_info' ),
 			'sync-ecommerce-course-admin'
 		);
-
 		add_settings_field(
 			'sku',
 			__( 'No mostrar SKU del producto', 'sync-ecommerce-course' ),
@@ -111,6 +110,20 @@ class CSPW_Settings {
 			'categories',
 			__( 'No mostrar categorías del producto', 'sync-ecommerce-course' ),
 			array( $this, 'categories_callback' ),
+			'sync-ecommerce-course-admin',
+			'cspw_setting_section'
+		);
+		add_settings_field(
+			'excerpt',
+			__( 'No mostrar descripción del producto', 'sync-ecommerce-course' ),
+			array( $this, 'excerpt_callback' ),
+			'sync-ecommerce-course-admin',
+			'cspw_setting_section'
+		);
+		add_settings_field(
+			'tabs',
+			__( 'Marca las tablas que deseas que no se muestren', 'sync-ecommerce-course' ),
+			array( $this, 'cspw_section_tabs' ),
 			'sync-ecommerce-course-admin',
 			'cspw_setting_section'
 		);
@@ -149,6 +162,11 @@ class CSPW_Settings {
 		$settings_keys = array(
 			'sku',
 			'categories',
+			'excerpt',
+			'tab_description',
+			'tab_aditional',
+			'tab_reviews',
+
 		);
 
 		foreach ( $settings_keys as $key ) {
@@ -166,7 +184,7 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function cspw_section_info() {
-		esc_html_e( 'Configura la apariencia de las tablas.', 'sync-ecommerce-course' );
+		esc_html_e( 'Configura la apariencia de los productos de tu tienda online.', 'sync-ecommerce-course' );
 	}
 
 	/**
@@ -177,7 +195,7 @@ class CSPW_Settings {
 	public function sku_callback() {
 		$settings = get_option( 'cspw_settings' );
 		
-		echo '<input type="checkbox" id="sku" name="cspw_settings[sku]" value="1"' . checked( 1, $settings['sku'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_sku" name="cspw_settings[sku]" value="1"' . checked( 1, $settings['sku'], false ) . '/>';
 	}
 
 	/**
@@ -188,7 +206,27 @@ class CSPW_Settings {
 	public function categories_callback() {
 		$settings = get_option( 'cspw_settings' );
 		
-		echo '<input type="checkbox" id="categories" name="cspw_settings[categories]" value="1"' . checked( 1, $settings['categories'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_categories" name="cspw_settings[categories]" value="1"' . checked( 1, $settings['categories'], false ) . '/>';
+	}
+
+	/**
+	 * Call back for excerpt
+	 *
+	 * @return void
+	 */
+	public function excerpt_callback() {
+		$settings = get_option( 'cspw_settings' );
+		
+		echo '<input type="checkbox" id="cspw_excerpt" name="cspw_settings[excerpt]" value="1"' . checked( 1, $settings['excerpt'], false ) . '/>';
+	}
+
+	/**
+	 * Info for holded automate section.
+	 *
+	 * @return void
+	 */
+	public function cspw_section_tabs() {
+		echo '<p class="cpsw-subtitulo">Configura la apariencia de las tablas.</p>';
 	}
 
 	/**
@@ -199,7 +237,7 @@ class CSPW_Settings {
 	public function tab_description_callback() {
 		$settings = get_option( 'cspw_settings' );
 		
-		echo '<input type="checkbox" id="tab_description" name="cspw_settings[tab_description]" value="1"' . checked( 1, $settings['tab_description'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_tab_description" name="cspw_settings[tab_description]" value="1"' . checked( 1, $settings['tab_description'], false ) . '/>';
 	}
 
 	/**
@@ -210,7 +248,7 @@ class CSPW_Settings {
 	public function tab_aditional_callback() {
 		$settings = get_option( 'cspw_settings' );
 		
-		echo '<input type="checkbox" id="tab_aditional" name="cspw_settings[tab_aditional]" value="1"' . checked( 1, $settings['tab_aditional'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_tab_aditional" name="cspw_settings[tab_aditional]" value="1"' . checked( 1, $settings['tab_aditional'], false ) . '/>';
 	}
 
 	/**
@@ -221,7 +259,7 @@ class CSPW_Settings {
 	public function tab_reviews_callback() {
 		$settings = get_option( 'cspw_settings' );
 		
-		echo '<input type="checkbox" id="tab_reviews" name="cspw_settings[tab_reviews]" value="1"' . checked( 1, $settings['tab_reviews'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_tab_reviews" name="cspw_settings[tab_reviews]" value="1"' . checked( 1, $settings['tab_reviews'], false ) . '/>';
 	}
 
 	/**

@@ -21,6 +21,7 @@ function cspw_single_product_functions() {
 		$cspw_settings   = get_option( 'cspw_settings' );
 		$show_sku        = isset( $cspw_settings['sku'] ) ? $cspw_settings['sku'] : 'true';
 		$categories      = isset( $cspw_settings['categories'] ) ? $cspw_settings['categories'] : 'true';
+		$excerpt         = isset( $cspw_settings['excerpt'] ) ? $cspw_settings['excerpt'] : 'true';
 		$tab_description = isset( $cspw_settings['categories'] ) ? $cspw_settings['tab_description'] : 'true';
 		$tab_aditional   = isset( $cspw_settings['categories'] ) ? $cspw_settings['tab_aditional'] : 'true';
 		$tab_reviews     = isset( $cspw_settings['categories'] ) ? $cspw_settings['tab_reviews'] : 'true';
@@ -39,6 +40,9 @@ function cspw_single_product_functions() {
 		}
 		if ( $tab_reviews == 1 ) {
 			add_filter( 'woocommerce_product_tabs', 'cspw_remove_product_tab_reviews', 98 );
+		}
+		if ( $excerpt == 1 ) {
+			remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20 );
 		}
 	}
 }
