@@ -318,6 +318,21 @@ class CSPW_Settings {
 			'cspw_setting_section_product_custom_price'
 		);
 
+		/******************* IMAGE ******************/
+		add_settings_section(
+			'cspw_setting_section_product_custom_image',
+			__( 'Configuración de la imagen', 'sync-ecommerce-course' ),
+			array( $this, 'cspw_section_product_image' ),
+			'cspw-settings-product-custom'
+		);
+		add_settings_field(
+			'custom_image_zoom',
+			__( 'Quitar zoom de la imagen del producto', 'sync-ecommerce-course' ),
+			array( $this, 'custom_image_zoom_callback' ),
+			'cspw-settings-product-custom',
+			'cspw_setting_section_product_custom_image'
+		);
+
 	}
 
 	/**
@@ -356,6 +371,7 @@ class CSPW_Settings {
 			'custom_text_after_add_cart_button',
 			'custom_price_before',
 			'custom_price_after',
+			'custom_image_zoom',
 
 		);
 
@@ -679,6 +695,26 @@ class CSPW_Settings {
 		$settings = get_option( 'cspw_settings' );
 		
 		echo '<input id="custom_price_after" name="cspw_settings[custom_price_after]" size="40" type="text" value="' . $settings['custom_price_after'] . '" />';
+	}
+
+	/**
+	 * Info for holded automate section.
+	 *
+	 * @return void
+	 */
+	public function cspw_section_product_image() {
+		esc_html_e( 'Configuración de la imagen.', 'sync-ecommerce-course' );
+	}
+
+	/**
+	 * Call back for custom_image_zoom
+	 *
+	 * @return void
+	 */
+	public function custom_image_zoom_callback() {
+		$settings = get_option( 'cspw_settings' );
+		
+		echo '<input type="checkbox" id="cspw_custom_image_zoom" name="cspw_settings[custom_image_zoom]" value="1"' . checked( 1, $settings['custom_image_zoom'], false ) . '/>';
 	}
 
 	/**

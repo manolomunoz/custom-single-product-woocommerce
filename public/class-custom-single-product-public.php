@@ -39,9 +39,12 @@ function cspw_custom_products_functions() {
 		$custom_text_after_add_cart_button = isset( $cspw_settings['custom_text_after_add_cart_button'] ) ? $cspw_settings['custom_text_after_add_cart_button'] : 'true';
 		$custom_price_before               = isset( $cspw_settings['custom_price_before'] ) ? $cspw_settings['custom_price_before'] : 'true';
 		$custom_price_after                = isset( $cspw_settings['custom_price_after'] ) ? $cspw_settings['custom_price_after'] : 'true';
+		$custom_image_zoom                 = isset( $cspw_settings['custom_image_zoom'] ) ? $cspw_settings['custom_image_zoom'] : 'true';
 
 		
-		
+		if ( $custom_image_zoom == 1 ) {
+			add_filter( 'woocommerce_single_product_zoom_enabled', '__return_false' );
+		}
 		if ( $custom_price_after != '' || $custom_price_before != '' ) {
 			add_filter( 'woocommerce_get_price_html', 'cspw_change_product_price_display' );
 		}
