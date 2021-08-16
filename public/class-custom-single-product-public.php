@@ -34,8 +34,11 @@ function cspw_custom_products_functions() {
 
 		// ****************** MOSTRAR PRODUCTO ******************
 		$custom_logo_add_cart_button = isset( $cspw_settings['custom_logo_add_cart_button'] ) ? $cspw_settings['custom_logo_add_cart_button'] : 'true';
+		$custom_text_add_cart_button = isset( $cspw_settings['custom_text_add_cart_button'] ) ? $cspw_settings['custom_text_add_cart_button'] : 'true';
+		$custom_text_before_add_cart_button = isset( $cspw_settings['custom_text_before_add_cart_button'] ) ? $cspw_settings['custom_text_before_add_cart_button'] : 'true';
+		$custom_text_after_add_cart_button = isset( $cspw_settings['custom_text_after_add_cart_button'] ) ? $cspw_settings['custom_text_after_add_cart_button'] : 'true';
 
-		if ( $custom_logo_add_cart_button != '' ) {
+		if ( $custom_logo_add_cart_button != '' || $custom_text_add_cart_button != '' || $custom_text_before_add_cart_button != '' || $custom_text_after_add_cart_button != '' ) {
 			remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
 			add_action( 'woocommerce_single_product_summary', 'cspw_product_custom_add_cart_button', 30 );
 		}
@@ -156,7 +159,6 @@ function cspw_product_custom_add_cart_button() {
 	global $product;
 
 	$cspw_settings = get_option( 'cspw_settings' );
-	$image         = '<img class="cspw-custom-logo-add-cart-button" style="width:50px;heigth=50px;" src="' . $cspw_settings['custom_logo_add_cart_button'] . '" />';
 
 	if ( ! $product->is_purchasable() ) {
 		return;
@@ -173,6 +175,10 @@ function cspw_product_custom_add_cart_button() {
 
 			<?php
 			do_action( 'woocommerce_before_add_to_cart_quantity' );
+			if ( isset( $cspw_settings['custom_text_before_add_cart_button'] ) ) {
+				$before_text = '<p class="cspw-custom-text-before-add-cart-button" >' . $cspw_settings['custom_text_before_add_cart_button'] . '</p>';
+				echo $before_text;
+			}
 
 			woocommerce_quantity_input(
 				array(
@@ -187,12 +193,27 @@ function cspw_product_custom_add_cart_button() {
 
 			<button type="submit" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>" class="single_add_to_cart_button button alt">
 			<?php
-			echo $image;
-			echo esc_html( $product->single_add_to_cart_text() ); 
+			if ( isset( $cspw_settings['custom_logo_add_cart_button'] ) ) {
+				$logo = '<img class="cspw-custom-logo-add-cart-button" style="width:50px;heigth=50px;" src="' . $cspw_settings['custom_logo_add_cart_button'] . '" />';
+				echo $logo;
+			}
+			if ( isset( $cspw_settings['custom_text_add_cart_button'] ) ) {
+				$text = $cspw_settings['custom_text_add_cart_button'];
+				echo $text;
+			} else {
+				echo esc_html( $product->single_add_to_cart_text() );
+			}
+			
 			?>
 			</button>
 
-			<?php do_action( 'woocommerce_after_add_to_cart_button' ); ?>
+			<?php 
+			do_action( 'woocommerce_after_add_to_cart_button' );
+			if ( isset( $cspw_settings['custom_text_after_add_cart_button'] ) ) {
+				$after_text = '<p class="cspw-custom-text-after-add-cart-button" >' . $cspw_settings['custom_text_after_add_cart_button'] . '</p>';
+				echo $after_text;
+			}
+			?>
 		</form>
 
 		<?php do_action( 'woocommerce_after_add_to_cart_form' ); ?>

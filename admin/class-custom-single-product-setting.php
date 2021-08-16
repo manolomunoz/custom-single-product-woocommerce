@@ -262,17 +262,38 @@ class CSPW_Settings {
 
 		// ***************************************************** PRODUCTO INDIVIDUAL POSITIONS *****************************************************
 		add_settings_section(
-			'cspw_setting_section_product_positions',
-			__( 'Configuración de la posición', 'sync-ecommerce-course' ),
+			'cspw_setting_section_product_custom_button',
+			__( 'Configuración del botón de añadir al carrito', 'sync-ecommerce-course' ),
 			array( $this, 'cspw_section_product_positions' ),
 			'cspw-settings-product-custom'
 		);
 		add_settings_field(
 			'custom_logo_add_cart_button',
-			__( 'Añadir logo al botón añadir al carrito (.png, .svg)', 'sync-ecommerce-course' ),
+			__( 'Añadir logo al botón añadir al carrito', 'sync-ecommerce-course' ),
 			array( $this, 'custom_logo_add_cart_button_callback' ),
 			'cspw-settings-product-custom',
-			'cspw_setting_section_product_positions'
+			'cspw_setting_section_product_custom_button'
+		);
+		add_settings_field(
+			'custom_text_add_cart_button',
+			__( 'Cambiar texto del botón', 'sync-ecommerce-course' ),
+			array( $this, 'custom_text_add_cart_button_callback' ),
+			'cspw-settings-product-custom',
+			'cspw_setting_section_product_custom_button'
+		);
+		add_settings_field(
+			'custom_text_before_add_cart_button',
+			__( 'Añadir texto antes del botón', 'sync-ecommerce-course' ),
+			array( $this, 'custom_text_before_add_cart_button_callback' ),
+			'cspw-settings-product-custom',
+			'cspw_setting_section_product_custom_button'
+		);
+		add_settings_field(
+			'custom_text_after_add_cart_button',
+			__( 'Añadir texto después del botón', 'sync-ecommerce-course' ),
+			array( $this, 'custom_text_after_add_cart_button_callback' ),
+			'cspw-settings-product-custom',
+			'cspw_setting_section_product_custom_button'
 		);
 
 	}
@@ -308,6 +329,9 @@ class CSPW_Settings {
 			'loop_add_cart_button',
 			// PRODUCTO INDIVIDUAL POSICIÓN
 			'custom_logo_add_cart_button',
+			'custom_text_add_cart_button',
+			'custom_text_before_add_cart_button',
+			'custom_text_after_add_cart_button',
 
 		);
 
@@ -568,6 +592,39 @@ class CSPW_Settings {
 		wp_enqueue_script( 'my-admin-js' );
 		
 		
+	}
+
+	/**
+	 * Call back for custom_text_add_cart_button
+	 *
+	 * @return void
+	 */
+	public function custom_text_add_cart_button_callback() {
+		$settings = get_option( 'cspw_settings' );
+		
+		echo '<input id="custom_text_add_cart_button" name="cspw_settings[custom_text_add_cart_button]" size="40" type="text" value="' . $settings['custom_text_add_cart_button'] . '" />';
+	}
+	
+	/**
+	 * Call back for custom_text_before_add_cart_button
+	 *
+	 * @return void
+	 */
+	public function custom_text_before_add_cart_button_callback() {
+		$settings = get_option( 'cspw_settings' );
+		
+		echo '<input id="custom_text_before_add_cart_button" name="cspw_settings[custom_text_before_add_cart_button]" size="40" type="text" value="' . $settings['custom_text_before_add_cart_button'] . '" />';
+	}
+	
+	/**
+	 * Call back for custom_text_after_add_cart_button
+	 *
+	 * @return void
+	 */
+	public function custom_text_after_add_cart_button_callback() {
+		$settings = get_option( 'cspw_settings' );
+		
+		echo '<input id="custom_text_after_add_cart_button" name="cspw_settings[custom_text_after_add_cart_button]" size="40" type="text" value="' . $settings['custom_text_after_add_cart_button'] . '" />';
 	}
 
 	/**
