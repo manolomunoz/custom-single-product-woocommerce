@@ -24,6 +24,7 @@ class CSPW_Settings {
 	private $cspw_settings;
 	private $cspw_settings_custom_product;
 	private $cspw_settings_custom_products;
+	private $cspw_settings_init;
 
 	/**
 	 * Construct of class
@@ -41,8 +42,8 @@ class CSPW_Settings {
 	 */
 	public function add_plugin_page() {
 		add_menu_page(
-			'Custom single product',
-			'Custom single product',
+			'Custom Woocommerce',
+			'Custom Woocommerce',
 			'manage_options',
 			'cspw',
 			array( $this, 'create_admin_page' ),
@@ -60,6 +61,7 @@ class CSPW_Settings {
 		$this->cspw_settings                 = get_option( 'cspw_settings' ); 
 		$this->cspw_settings_custom_product  = get_option( 'cspw_settings_custom_product' );
 		$this->cspw_settings_custom_products = get_option( 'cspw_settings_custom_products' );
+		$this->cspw_settings_init            = get_option( 'cspw_settings_init' );
 		?>
 
 		<div class="wrap">
@@ -73,11 +75,21 @@ class CSPW_Settings {
 			?>
 		    
 			<h2 class="nav-tab-wrapper">
+				<a href="?page=<?php echo $_GET['page']; ?>" class="nav-tab <?php echo $active_tab == null ? 'nav-tab-active' : ''; ?>"><?php echo esc_html__( 'Configuraciones generales', 'cspw_woocommerce' ) ?></a>
 				<a href="?page=<?php echo $_GET['page']; ?>&tab=settings" class="nav-tab <?php echo $active_tab == 'settings' ? 'nav-tab-active' : ''; ?>"><?php echo esc_html__( 'Producto individual', 'cspw_woocommerce' ) ?></a>
 				<a href="?page=<?php echo $_GET['page']; ?>&tab=product_custom" class="nav-tab <?php echo $active_tab == 'product_custom' ? 'nav-tab-active' : ''; ?>"><?php echo esc_html__( 'Personalizar producto individual', 'cspw_woocommerce' ) ?></a>
 				<a href="?page=<?php echo $_GET['page']; ?>&tab=products_settings" class="nav-tab <?php echo $active_tab == 'products_settings' ? 'nav-tab-active' : ''; ?>"><?php echo esc_html__( 'Productos', 'cspw_woocommerce' ) ?></a>
 			</h2>
 
+			<?php	if ( null === $active_tab ) { ?>
+				<form method="post" action="options.php">
+					<?php
+					settings_fields( 'cspw_settings_init' );
+					do_settings_sections( 'cspw-general-settings-init' );
+					submit_button();
+					?>
+				</form>
+			<?php } ?>
 			<?php	if ( 'settings' === $active_tab ) { ?>
 				<form method="post" action="options.php">
 					<?php
@@ -134,6 +146,21 @@ class CSPW_Settings {
 			'cspw_settings_custom_products',
 			'cspw_settings_custom_products',
 			array( $this, 'sanitize_fields' )
+		);
+
+		// Custom product Settings.
+		register_setting(
+			'cspw_settings_init',
+			'cspw_settings_init',
+			array( $this, 'sanitize_fields' )
+		);
+
+		// ***************************************************** INIT CONFIGURATIONS *****************************************************
+		add_settings_section(
+			'cspw_setting_init_section',
+			__( 'Configuraciones básicas', 'cspw_woocommerce' ),
+			array( $this, 'cspw_section_init' ),
+			'cspw-general-settings-init'
 		);
 
 		// ***************************************************** PRODUCTO INDIVIDUAL *****************************************************
@@ -458,6 +485,19 @@ class CSPW_Settings {
 
 		return $sanitary_values;
 	}
+
+
+	/****************** INIT CONFIGURATIONS ******************/
+
+	/**
+	 * Info for holded automate section.
+	 *
+	 * @return void
+	 */
+	public function cspw_section_init() {
+		esc_html_e( 'Configuraciones generales para una mejor venta de productos.', 'cspw_woocommerce' );
+	}
+
 
 	/****************** PRODUCTO INDIVIDUAL ******************/
 

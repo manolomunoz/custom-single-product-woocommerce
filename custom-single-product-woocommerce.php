@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Custom Single Product Woocommerce
  * Plugin URI:  
- * Description: Custom position and show element in single product page.
+ * Description: Custom position and show element in woocommerce.
  * Version:     0.1
  * Author:      Manuel Muñoz Rodríguez
  * Author URI:  
