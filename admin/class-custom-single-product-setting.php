@@ -44,7 +44,7 @@ class CSPW_Settings {
 			'manage_options',
 			'cspw',
 			array( $this, 'create_admin_page' ),
-			esc_url( plugins_url( 'admin/icono.svg', dirname( __FILE__ ) ) ),
+			esc_url( plugins_url( 'admin/images/icono.svg', dirname( __FILE__ ) ) ),
 			99
 		);
 	}
@@ -69,7 +69,7 @@ class CSPW_Settings {
 		    
 			<h2 class="nav-tab-wrapper">
 				<a href="?page=<?php echo $_GET['page']; ?>&tab=settings" class="nav-tab <?php echo $active_tab == 'settings' ? 'nav-tab-active' : ''; ?>">Producto individual</a>
-				<a href="?page=<?php echo $_GET['page']; ?>&tab=product_positions" class="nav-tab <?php echo $active_tab == 'product_positions' ? 'nav-tab-active' : ''; ?>">Posiciones producto individual</a>
+				<a href="?page=<?php echo $_GET['page']; ?>&tab=product_custom" class="nav-tab <?php echo $active_tab == 'product_custom' ? 'nav-tab-active' : ''; ?>">Personalizar producto individual</a>
 				<a href="?page=<?php echo $_GET['page']; ?>&tab=products_settings" class="nav-tab <?php echo $active_tab == 'products_settings' ? 'nav-tab-active' : ''; ?>">Productos</a>
 			</h2>
 
@@ -82,11 +82,11 @@ class CSPW_Settings {
 					?>
 				</form>
 			<?php } ?>
-			<?php	if ( 'product_positions' === $active_tab ) { ?>
+			<?php	if ( 'product_custom' === $active_tab ) { ?>
 				<form method="post" action="options.php">
 					<?php
 					settings_fields( 'cspw_settings' );
-					do_settings_sections( 'cspw-settings-product-positions' );
+					do_settings_sections( 'cspw-settings-product-custom' );
 					submit_button();
 					?>
 				</form>
@@ -174,39 +174,40 @@ class CSPW_Settings {
 			'cspw_setting_section'
 		);
 		add_settings_field(
-			'tabs',
-			__( 'Marca las tablas que deseas que no se muestren', 'sync-ecommerce-course' ),
-			array( $this, 'cspw_section_tabs' ),
+			'related_product',
+			__( 'No mostrar los productos relacionados', 'sync-ecommerce-course' ),
+			array( $this, 'related_product_callback' ),
 			'cspw-general-settings',
 			'cspw_setting_section'
 		);
+
+		add_settings_section(
+			'cspw_setting_section_tabs',
+			__( 'Elige las tablas que deseas que no se muestren', 'sync-ecommerce-course' ),
+			array( $this, 'cspw_section_tabs' ),
+			'cspw-general-settings'
+		);
+		
 		add_settings_field(
 			'tab_description',
 			__( 'Descripción', 'sync-ecommerce-course' ),
 			array( $this, 'tab_description_callback' ),
 			'cspw-general-settings',
-			'cspw_setting_section'
+			'cspw_setting_section_tabs'
 		);
 		add_settings_field(
 			'tab_aditional',
 			__( 'Información adicional', 'sync-ecommerce-course' ),
 			array( $this, 'tab_aditional_callback' ),
 			'cspw-general-settings',
-			'cspw_setting_section'
+			'cspw_setting_section_tabs'
 		);
 		add_settings_field(
 			'tab_reviews',
 			__( 'Valoraciones', 'sync-ecommerce-course' ),
 			array( $this, 'tab_reviews_callback' ),
 			'cspw-general-settings',
-			'cspw_setting_section'
-		);
-		add_settings_field(
-			'related_product',
-			__( 'No mostrar los productos relacionados', 'sync-ecommerce-course' ),
-			array( $this, 'related_product_callback' ),
-			'cspw-general-settings',
-			'cspw_setting_section'
+			'cspw_setting_section_tabs'
 		);
 
 		// ***************************************************** PRODUCTOS *****************************************************
@@ -264,13 +265,13 @@ class CSPW_Settings {
 			'cspw_setting_section_product_positions',
 			__( 'Configuración de la posición', 'sync-ecommerce-course' ),
 			array( $this, 'cspw_section_product_positions' ),
-			'cspw-settings-product-positions'
+			'cspw-settings-product-custom'
 		);
 		add_settings_field(
 			'custom_logo_add_cart_button',
 			__( 'Añadir logo al botón añadir al carrito (.png, .svg)', 'sync-ecommerce-course' ),
 			array( $this, 'custom_logo_add_cart_button_callback' ),
-			'cspw-settings-product-positions',
+			'cspw-settings-product-custom',
 			'cspw_setting_section_product_positions'
 		);
 
@@ -555,9 +556,18 @@ class CSPW_Settings {
 	public function custom_logo_add_cart_button_callback() {
 		$settings = get_option( 'cspw_settings' );
 		?>
-		<input id="upload_image" type="text" size="36" name="ad_image" value=<?PHP echo get_option('ad_image'); ?> /> 
-		<input id="upload_image_button" class="button" type="button" value="Upload Menu" />
+		<label for="upload_image">
+			<input id="custom_logo_add_cart_button" type="text" size="36" name="cspw_settings[custom_logo_add_cart_button]" value="<?php esc_attr( $settings['custom_logo_add_cart_button'] ) ?>" /> 
+			<input id="upload_image_button" class="button" type="button" value="Seleccionar imagen" />
+			<?php echo 'Imagen seleccionada --> ' . $settings['custom_logo_add_cart_button']; ?>
+			<br />Ingresa una URL o añade una imagen
+		</label>
 		<?php
+		wp_enqueue_media();
+		wp_register_script( 'my-admin-js', esc_url( plugins_url( 'admin/js/upload_file.js', dirname( __FILE__ ) ) ), array( 'jquery' ) );
+		wp_enqueue_script( 'my-admin-js' );
+		
+		
 	}
 
 	/**
