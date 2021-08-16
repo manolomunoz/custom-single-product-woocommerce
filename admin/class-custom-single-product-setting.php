@@ -22,6 +22,7 @@ class CSPW_Settings {
 	 * @var array
 	 */
 	private $cspw_settings;
+	private $cspw_settings_custom_product;
 
 	/**
 	 * Construct of class
@@ -55,10 +56,12 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function create_admin_page() {
-		$this->cspw_settings = get_option( 'cspw_settings' ); ?>
+		$this->cspw_settings                = get_option( 'cspw_settings' ); 
+		$this->cspw_settings_custom_product = get_option( 'cspw_settings_custom_product' );
+		?>
 
 		<div class="wrap">
-			<h2>Configuración de la apariencia de productos</h2>
+			<h2><?php echo esc_html__( 'Configuración de la apariencia de productos', 'cspw_woocommerce' ) ?></h2>
 			<p></p>
 			<?php 
 			settings_errors();
@@ -68,9 +71,9 @@ class CSPW_Settings {
 			?>
 		    
 			<h2 class="nav-tab-wrapper">
-				<a href="?page=<?php echo $_GET['page']; ?>&tab=settings" class="nav-tab <?php echo $active_tab == 'settings' ? 'nav-tab-active' : ''; ?>">Producto individual</a>
-				<a href="?page=<?php echo $_GET['page']; ?>&tab=product_custom" class="nav-tab <?php echo $active_tab == 'product_custom' ? 'nav-tab-active' : ''; ?>">Personalizar producto individual</a>
-				<a href="?page=<?php echo $_GET['page']; ?>&tab=products_settings" class="nav-tab <?php echo $active_tab == 'products_settings' ? 'nav-tab-active' : ''; ?>">Productos</a>
+				<a href="?page=<?php echo $_GET['page']; ?>&tab=settings" class="nav-tab <?php echo $active_tab == 'settings' ? 'nav-tab-active' : ''; ?>"><?php echo esc_html__( 'Producto individual', 'cspw_woocommerce' ) ?></a>
+				<a href="?page=<?php echo $_GET['page']; ?>&tab=product_custom" class="nav-tab <?php echo $active_tab == 'product_custom' ? 'nav-tab-active' : ''; ?>"><?php echo esc_html__( 'Personalizar producto individual', 'cspw_woocommerce' ) ?></a>
+				<a href="?page=<?php echo $_GET['page']; ?>&tab=products_settings" class="nav-tab <?php echo $active_tab == 'products_settings' ? 'nav-tab-active' : ''; ?>"><?php echo esc_html__( 'Productos', 'cspw_woocommerce' ) ?></a>
 			</h2>
 
 			<?php	if ( 'settings' === $active_tab ) { ?>
@@ -85,7 +88,7 @@ class CSPW_Settings {
 			<?php	if ( 'product_custom' === $active_tab ) { ?>
 				<form method="post" action="options.php">
 					<?php
-					settings_fields( 'cspw_settings' );
+					settings_fields( 'cspw_settings_custom_product' );
 					do_settings_sections( 'cspw-settings-product-custom' );
 					submit_button();
 					?>
@@ -117,65 +120,72 @@ class CSPW_Settings {
 			array( $this, 'sanitize_fields' )
 		);
 
+		// Custom product Settings.
+		register_setting(
+			'cspw_settings_custom_product',
+			'cspw_settings_custom_product',
+			array( $this, 'sanitize_fields' )
+		);
+
 		// ***************************************************** PRODUCTO INDIVIDUAL *****************************************************
 		add_settings_section(
 			'cspw_setting_section',
-			__( 'Configuración de la apariencia del producto', 'sync-ecommerce-course' ),
+			__( 'Configuración de la apariencia del producto', 'cspw_woocommerce' ),
 			array( $this, 'cspw_section_info' ),
 			'cspw-general-settings'
 		);
 		add_settings_field(
 			'title',
-			__( 'No mostrar el nombre del producto', 'sync-ecommerce-course' ),
+			__( 'No mostrar el nombre del producto', 'cspw_woocommerce' ),
 			array( $this, 'title_callback' ),
 			'cspw-general-settings',
 			'cspw_setting_section'
 		);
 		add_settings_field(
 			'sku',
-			__( 'No mostrar SKU del producto', 'sync-ecommerce-course' ),
+			__( 'No mostrar SKU del producto', 'cspw_woocommerce' ),
 			array( $this, 'sku_callback' ),
 			'cspw-general-settings',
 			'cspw_setting_section'
 		);
 		add_settings_field(
 			'categories',
-			__( 'No mostrar categorías del producto', 'sync-ecommerce-course' ),
+			__( 'No mostrar categorías del producto', 'cspw_woocommerce' ),
 			array( $this, 'categories_callback' ),
 			'cspw-general-settings',
 			'cspw_setting_section'
 		);
 		add_settings_field(
 			'excerpt',
-			__( 'No mostrar descripción del producto', 'sync-ecommerce-course' ),
+			__( 'No mostrar descripción del producto', 'cspw_woocommerce' ),
 			array( $this, 'excerpt_callback' ),
 			'cspw-general-settings',
 			'cspw_setting_section'
 		);
 		add_settings_field(
 			'price',
-			__( 'No mostrar precio del producto', 'sync-ecommerce-course' ),
+			__( 'No mostrar precio del producto', 'cspw_woocommerce' ),
 			array( $this, 'price_callback' ),
 			'cspw-general-settings',
 			'cspw_setting_section'
 		);
 		add_settings_field(
 			'image',
-			__( 'No mostrar las imágenes del producto', 'sync-ecommerce-course' ),
+			__( 'No mostrar las imágenes del producto', 'cspw_woocommerce' ),
 			array( $this, 'image_callback' ),
 			'cspw-general-settings',
 			'cspw_setting_section'
 		);
 		add_settings_field(
 			'add_cart_button',
-			__( 'No mostrar botón de añadir al carrito del producto', 'sync-ecommerce-course' ),
+			__( 'No mostrar botón de añadir al carrito del producto', 'cspw_woocommerce' ),
 			array( $this, 'add_cart_button_callback' ),
 			'cspw-general-settings',
 			'cspw_setting_section'
 		);
 		add_settings_field(
 			'related_product',
-			__( 'No mostrar los productos relacionados', 'sync-ecommerce-course' ),
+			__( 'No mostrar los productos relacionados', 'cspw_woocommerce' ),
 			array( $this, 'related_product_callback' ),
 			'cspw-general-settings',
 			'cspw_setting_section'
@@ -183,28 +193,28 @@ class CSPW_Settings {
 
 		add_settings_section(
 			'cspw_setting_section_tabs',
-			__( 'Elige las tablas que deseas que no se muestren', 'sync-ecommerce-course' ),
+			__( 'Elige las tablas que deseas que no se muestren', 'cspw_woocommerce' ),
 			array( $this, 'cspw_section_tabs' ),
 			'cspw-general-settings'
 		);
 		
 		add_settings_field(
 			'tab_description',
-			__( 'Descripción', 'sync-ecommerce-course' ),
+			__( 'Descripción', 'cspw_woocommerce' ),
 			array( $this, 'tab_description_callback' ),
 			'cspw-general-settings',
 			'cspw_setting_section_tabs'
 		);
 		add_settings_field(
 			'tab_aditional',
-			__( 'Información adicional', 'sync-ecommerce-course' ),
+			__( 'Información adicional', 'cspw_woocommerce' ),
 			array( $this, 'tab_aditional_callback' ),
 			'cspw-general-settings',
 			'cspw_setting_section_tabs'
 		);
 		add_settings_field(
 			'tab_reviews',
-			__( 'Valoraciones', 'sync-ecommerce-course' ),
+			__( 'Valoraciones', 'cspw_woocommerce' ),
 			array( $this, 'tab_reviews_callback' ),
 			'cspw-general-settings',
 			'cspw_setting_section_tabs'
@@ -213,48 +223,48 @@ class CSPW_Settings {
 		// ***************************************************** PRODUCTOS *****************************************************
 		add_settings_section(
 			'cspw_setting_section_products',
-			__( 'Configuración de la apariencia de los productos', 'sync-ecommerce-course' ),
+			__( 'Configuración de la apariencia de los productos', 'cspw_woocommerce' ),
 			array( $this, 'cspw_section_info_products' ),
 			'cspw-settings-products'
 		);
 		add_settings_field(
 			'results',
-			__( 'No mostrar el número de productos', 'sync-ecommerce-course' ),
+			__( 'No mostrar el número de productos', 'cspw_woocommerce' ),
 			array( $this, 'results_callback' ),
 			'cspw-settings-products',
 			'cspw_setting_section_products'
 		);
 		add_settings_field(
 			'order',
-			__( 'No mostrar desplegable de orden de los productos', 'sync-ecommerce-course' ),
+			__( 'No mostrar desplegable de orden de los productos', 'cspw_woocommerce' ),
 			array( $this, 'order_callback' ),
 			'cspw-settings-products',
 			'cspw_setting_section_products'
 		);
 		add_settings_field(
 			'loop_title',
-			__( 'No mostrar el título de productos', 'sync-ecommerce-course' ),
+			__( 'No mostrar el título de productos', 'cspw_woocommerce' ),
 			array( $this, 'loop_title_callback' ),
 			'cspw-settings-products',
 			'cspw_setting_section_products'
 		);
 		add_settings_field(
 			'loop_image',
-			__( 'No mostrar la imagen de los productos', 'sync-ecommerce-course' ),
+			__( 'No mostrar la imagen de los productos', 'cspw_woocommerce' ),
 			array( $this, 'loop_image_callback' ),
 			'cspw-settings-products',
 			'cspw_setting_section_products'
 		);
 		add_settings_field(
 			'loop_price',
-			__( 'No mostrar el precio de los productos', 'sync-ecommerce-course' ),
+			__( 'No mostrar el precio de los productos', 'cspw_woocommerce' ),
 			array( $this, 'loop_price_callback' ),
 			'cspw-settings-products',
 			'cspw_setting_section_products'
 		);
 		add_settings_field(
 			'loop_add_cart_button',
-			__( 'No mostrar botón añadir al carrito de los productos', 'sync-ecommerce-course' ),
+			__( 'No mostrar botón añadir al carrito de los productos', 'cspw_woocommerce' ),
 			array( $this, 'loop_add_cart_button_callback' ),
 			'cspw-settings-products',
 			'cspw_setting_section_products'
@@ -263,34 +273,34 @@ class CSPW_Settings {
 		// ***************************************************** PRODUCTO INDIVIDUAL POSITIONS *****************************************************
 		add_settings_section(
 			'cspw_setting_section_product_custom_button',
-			__( 'Configuración del botón de añadir al carrito', 'sync-ecommerce-course' ),
+			__( 'Configuración del botón de añadir al carrito', 'cspw_woocommerce' ),
 			array( $this, 'cspw_section_product_positions' ),
 			'cspw-settings-product-custom'
 		);
 		add_settings_field(
 			'custom_logo_add_cart_button',
-			__( 'Añadir logo al botón añadir al carrito', 'sync-ecommerce-course' ),
+			__( 'Añadir logo al botón añadir al carrito', 'cspw_woocommerce' ),
 			array( $this, 'custom_logo_add_cart_button_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_button'
 		);
 		add_settings_field(
 			'custom_text_add_cart_button',
-			__( 'Cambiar texto del botón', 'sync-ecommerce-course' ),
+			__( 'Cambiar texto del botón', 'cspw_woocommerce' ),
 			array( $this, 'custom_text_add_cart_button_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_button'
 		);
 		add_settings_field(
 			'custom_text_before_add_cart_button',
-			__( 'Añadir texto antes del botón', 'sync-ecommerce-course' ),
+			__( 'Añadir texto antes del botón', 'cspw_woocommerce' ),
 			array( $this, 'custom_text_before_add_cart_button_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_button'
 		);
 		add_settings_field(
 			'custom_text_after_add_cart_button',
-			__( 'Añadir texto después del botón', 'sync-ecommerce-course' ),
+			__( 'Añadir texto después del botón', 'cspw_woocommerce' ),
 			array( $this, 'custom_text_after_add_cart_button_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_button'
@@ -299,20 +309,20 @@ class CSPW_Settings {
 		/******************* PRICE ******************/
 		add_settings_section(
 			'cspw_setting_section_product_custom_price',
-			__( 'Configuración del precio', 'sync-ecommerce-course' ),
+			__( 'Configuración del precio', 'cspw_woocommerce' ),
 			array( $this, 'cspw_section_product_price' ),
 			'cspw-settings-product-custom'
 		);
 		add_settings_field(
 			'custom_price_before',
-			__( 'Añadir texto antes del precio', 'sync-ecommerce-course' ),
+			__( 'Añadir texto antes del precio', 'cspw_woocommerce' ),
 			array( $this, 'custom_price_before_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_price'
 		);
 		add_settings_field(
 			'custom_price_after',
-			__( 'Añadir texto después del precio', 'sync-ecommerce-course' ),
+			__( 'Añadir texto después del precio', 'cspw_woocommerce' ),
 			array( $this, 'custom_price_after_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_price'
@@ -321,22 +331,37 @@ class CSPW_Settings {
 		/******************* IMAGE ******************/
 		add_settings_section(
 			'cspw_setting_section_product_custom_image',
-			__( 'Configuración de la imagen', 'sync-ecommerce-course' ),
+			__( 'Configuración de la imagen', 'cspw_woocommerce' ),
 			array( $this, 'cspw_section_product_image' ),
 			'cspw-settings-product-custom'
 		);
 		add_settings_field(
 			'custom_image_zoom',
-			__( 'Quitar zoom de la imagen del producto', 'sync-ecommerce-course' ),
+			__( 'Quitar zoom de la imagen del producto', 'cspw_woocommerce' ),
 			array( $this, 'custom_image_zoom_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_image'
 		);
 
+		/******************* TASB ******************/
+		add_settings_section(
+			'cspw_setting_section_product_custom_tabs',
+			__( 'Configuración de la imagen', 'cspw_woocommerce' ),
+			array( $this, 'cspw_section_product_tabs' ),
+			'cspw-settings-product-custom'
+		);
+		add_settings_field(
+			'custom_show_tabs',
+			__( 'Modo de visualización de las tablas', 'cspw_woocommerce' ),
+			array( $this, 'custom_show_tabs_callback' ),
+			'cspw-settings-product-custom',
+			'cspw_setting_section_product_custom_tabs'
+		);
+
 	}
 
 	/**
-	 * Sanitize fiels before saves in DB
+	 * Sanitize fields before saves in DB
 	 *
 	 * @param array $input Input fields.
 	 * @return array
@@ -372,6 +397,7 @@ class CSPW_Settings {
 			'custom_price_before',
 			'custom_price_after',
 			'custom_image_zoom',
+			'custom_show_tabs',
 
 		);
 
@@ -392,7 +418,7 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function cspw_section_info() {
-		esc_html_e( 'Configura la apariencia de los productos de tu tienda online.', 'sync-ecommerce-course' );
+		esc_html_e( 'Configura la apariencia de los productos de tu tienda online.', 'cspw_woocommerce' );
 	}
 
 	/**
@@ -478,7 +504,7 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function cspw_section_tabs() {
-		echo '<p class="cpsw-subtitulo">Configura la apariencia de las tablas.</p>';
+		esc_html_e( 'Configura la apariencia de las tablas.', 'cspw_woocommerce' );
 	}
 
 	/**
@@ -533,7 +559,7 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function cspw_section_info_products() {
-		esc_html_e( 'Configura la apariencia de los productos de tu tienda online.', 'sync-ecommerce-course' );
+		esc_html_e( 'Configura la apariencia de los productos de tu tienda online.', 'cspw_woocommerce' );
 	}
 
 	/**
@@ -609,7 +635,7 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function cspw_section_product_positions() {
-		esc_html_e( 'Configura la posición de los elementos en la página de producto.', 'sync-ecommerce-course' );
+		esc_html_e( 'Configura la posición de los elementos en la página de producto.', 'cspw_woocommerce' );
 	}
 
 	/**
@@ -618,19 +644,17 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function custom_logo_add_cart_button_callback() {
-		$settings = get_option( 'cspw_settings' );
+		$settings = get_option( 'cspw_settings_custom_product' );
 		?>
 		<label for="upload_image">
-			<input id="custom_logo_add_cart_button" type="text" size="36" name="cspw_settings[custom_logo_add_cart_button]" value="<?php echo $settings['custom_logo_add_cart_button'] ?>" />
+			<input id="custom_logo_add_cart_button" type="text" size="36" name="cspw_settings_custom_product[custom_logo_add_cart_button]" value="<?php echo esc_attr__( $settings['custom_logo_add_cart_button'], 'cspw_woocommerce' );  ?>" />
 			<input id="upload_image_button" class="button" type="button" value="Seleccionar imagen" />
-			<br />Ingresa una URL o añade una imagen
+			<br /><?php esc_html_e( 'Ingresa una URL o añade una imagen', 'cspw_woocommerce' ) ?>
 		</label>
 		<?php
 		wp_enqueue_media();
 		wp_register_script( 'my-admin-js', esc_url( plugins_url( 'admin/js/upload_file.js', dirname( __FILE__ ) ) ), array( 'jquery' ) );
 		wp_enqueue_script( 'my-admin-js' );
-		
-		
 	}
 
 	/**
@@ -639,9 +663,9 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function custom_text_add_cart_button_callback() {
-		$settings = get_option( 'cspw_settings' );
+		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input id="custom_text_add_cart_button" name="cspw_settings[custom_text_add_cart_button]" size="40" type="text" value="' . $settings['custom_text_add_cart_button'] . '" />';
+		echo '<input id="custom_text_add_cart_button" name="cspw_settings_custom_product[custom_text_add_cart_button]" size="40" type="text" value="' . esc_attr__( $settings['custom_text_add_cart_button'], 'cspw_woocommerce' ) . '" />';
 	}
 	
 	/**
@@ -650,9 +674,9 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function custom_text_before_add_cart_button_callback() {
-		$settings = get_option( 'cspw_settings' );
+		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input id="custom_text_before_add_cart_button" name="cspw_settings[custom_text_before_add_cart_button]" size="40" type="text" value="' . $settings['custom_text_before_add_cart_button'] . '" />';
+		echo '<input id="custom_text_before_add_cart_button" name="cspw_settings_custom_product[custom_text_before_add_cart_button]" size="40" type="text" value="' . esc_attr__( $settings['custom_text_before_add_cart_button'], 'cspw_woocommerce' ) . '" />';
 	}
 	
 	/**
@@ -661,9 +685,9 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function custom_text_after_add_cart_button_callback() {
-		$settings = get_option( 'cspw_settings' );
+		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input id="custom_text_after_add_cart_button" name="cspw_settings[custom_text_after_add_cart_button]" size="40" type="text" value="' . $settings['custom_text_after_add_cart_button'] . '" />';
+		echo '<input id="custom_text_after_add_cart_button" name="cspw_settings_custom_product[custom_text_after_add_cart_button]" size="40" type="text" value="' . esc_attr__( $settings['custom_text_after_add_cart_button'], 'cspw_woocommerce' ) . '" />';
 	}
 
 	/**
@@ -672,7 +696,7 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function cspw_section_product_price() {
-		esc_html_e( 'Configuración del precio.', 'sync-ecommerce-course' );
+		esc_html_e( 'Configuración del precio.', 'cspw_woocommerce' );
 	}
 
 	/**
@@ -681,9 +705,9 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function custom_price_before_callback() {
-		$settings = get_option( 'cspw_settings' );
+		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input id="custom_price_before" name="cspw_settings[custom_price_before]" size="40" type="text" value="' . $settings['custom_price_before'] . '" />';
+		echo '<input id="custom_price_before" name="cspw_settings_custom_product[custom_price_before]" size="40" type="text" value="' . esc_attr__( $settings['custom_price_before'], 'cspw_woocommerce' ) . '" />';
 	}
 
 	/**
@@ -692,9 +716,9 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function custom_price_after_callback() {
-		$settings = get_option( 'cspw_settings' );
+		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input id="custom_price_after" name="cspw_settings[custom_price_after]" size="40" type="text" value="' . $settings['custom_price_after'] . '" />';
+		echo '<input id="custom_price_after" name="cspw_settings_custom_product[custom_price_after]" size="40" type="text" value="' . esc_attr__( $settings['custom_price_after'], 'cspw_woocommerce' ) . '" />';
 	}
 
 	/**
@@ -703,7 +727,7 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function cspw_section_product_image() {
-		esc_html_e( 'Configuración de la imagen.', 'sync-ecommerce-course' );
+		esc_html_e( 'Configuración de la imagen.', 'cspw_woocommerce' );
 	}
 
 	/**
@@ -712,9 +736,35 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function custom_image_zoom_callback() {
-		$settings = get_option( 'cspw_settings' );
+		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input type="checkbox" id="cspw_custom_image_zoom" name="cspw_settings[custom_image_zoom]" value="1"' . checked( 1, $settings['custom_image_zoom'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_custom_image_zoom" name="cspw_settings_custom_product[custom_image_zoom]" value="1"' . checked( 1, $settings['custom_image_zoom'], false ) . '/>';
+	}
+
+	/**
+	 * Info for holded automate section.
+	 *
+	 * @return void
+	 */
+	public function cspw_section_product_tabs() {
+		esc_html_e( 'Configuración de la visualización de las tablas.', 'cspw_woocommerce' );
+	}
+
+	/**
+	 * Call back for custom_show_tabs
+	 *
+	 * @return void
+	 */
+	public function custom_show_tabs_callback() {
+		$settings  = get_option( 'cspw_settings_custom_product' );
+		$show_tabs = $settings['custom_show_tabs'];
+
+		echo '<select id="cspw_custom_show_tabs" name="cspw_settings_custom_product[custom_show_tabs]">';
+
+		echo '<option value="pestanas" ' . selected( $show_tabs, "pestanas" ) . '>' . __( 'Pestañas', 'cspw_woocommerce' ) . '</option>';
+		echo '<option value="lista" ' . selected( $show_tabs, "lista" ) . '>' . __( 'Lista', 'cspw_woocommerce' ) . '</option>';
+
+		echo '</select>';
 	}
 
 	/**
@@ -729,6 +779,8 @@ class CSPW_Settings {
 			#custom_logo_add_cart_button {
 				width: 350px;
 			}
+			#cspw_custom_show_tabs {
+				width: 200px;
 			';
 		echo '</style>';
 	}
