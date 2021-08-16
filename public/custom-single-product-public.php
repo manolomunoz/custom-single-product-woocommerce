@@ -46,8 +46,11 @@ function cspw_custom_single_product_functions() {
 		$custom_price_after                 = isset( $cspw_settings_custom_product['custom_price_after'] ) ? $cspw_settings_custom_product['custom_price_after'] : 'true';
 		$custom_image_zoom                  = isset( $cspw_settings_custom_product['custom_image_zoom'] ) ? $cspw_settings_custom_product['custom_image_zoom'] : 'true';
 		$custom_show_tabs                   = isset( $cspw_settings_custom_product['custom_show_tabs'] ) ? $cspw_settings_custom_product['custom_show_tabs'] : 'true';
+		$custom_new_tab                     = isset( $cspw_settings_custom_product['custom_new_tab'] ) ? $cspw_settings_custom_product['custom_new_tab'] : 'true';
 
-		
+		if ( $custom_new_tab != 'true' ) {
+			add_filter( 'woocommerce_product_tabs', 'cspw_new_product_tab' );
+		}
 		if ( $custom_show_tabs == 'lista' ) {
 			remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs', 10 );
 			add_action( 'woocommerce_after_single_product_summary', 'cspw_show_tabs_list', 5 );
@@ -394,4 +397,26 @@ function cspw_show_tabs_list() {
 
 	echo '</div>';
 
+}
+
+function cspw_new_product_tab( $tabs ) {
+	$cspw_settings_custom_product = get_option( 'cspw_settings_custom_product' );
+	$custom_new_tab               = $cspw_settings_custom_product['custom_new_tab'];
+
+	$tabs['cspw_tab'] = array(
+		'title'     => $custom_new_tab,
+		'priority'  => 50,
+		'callback'  => 'cspw_new_product_tab_content'
+	);
+
+	return $tabs;
+}
+
+function cspw_new_product_tab_content() {
+	$cspw_settings_custom_product = get_option( 'cspw_settings_custom_product' );
+	$custom_new_tab_content       = isset( $cspw_settings_custom_product['custom_new_tab_content'] ) ? $cspw_settings_custom_product['custom_new_tab_content'] : 'true';
+	if ( $custom_new_tab_content != 'true' ) {
+		echo $custom_new_tab_content;
+	}
+	
 }

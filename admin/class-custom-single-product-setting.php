@@ -418,7 +418,7 @@ class CSPW_Settings {
 		/******************* TABS ******************/
 		add_settings_section(
 			'cspw_setting_section_product_custom_tabs',
-			__( 'Configuración de la imagen', 'cspw_woocommerce' ),
+			__( 'Configuración de las tablas', 'cspw_woocommerce' ),
 			array( $this, 'cspw_section_product_tabs' ),
 			'cspw-settings-product-custom'
 		);
@@ -426,6 +426,20 @@ class CSPW_Settings {
 			'custom_show_tabs',
 			__( 'Modo de visualización de las tablas', 'cspw_woocommerce' ),
 			array( $this, 'custom_show_tabs_callback' ),
+			'cspw-settings-product-custom',
+			'cspw_setting_section_product_custom_tabs'
+		);
+		add_settings_field(
+			'custom_new_tab',
+			__( 'Añadir nueva tabla (nombre)', 'cspw_woocommerce' ),
+			array( $this, 'custom_new_tab_callback' ),
+			'cspw-settings-product-custom',
+			'cspw_setting_section_product_custom_tabs'
+		);
+		add_settings_field(
+			'custom_new_tab_content',
+			__( 'Añadir contenido a la nueva tabla', 'cspw_woocommerce' ),
+			array( $this, 'custom_new_tab_content_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_tabs'
 		);
@@ -475,6 +489,8 @@ class CSPW_Settings {
 			'custom_price_after',
 			'custom_image_zoom',
 			'custom_show_tabs',
+			'custom_new_tab',
+			'custom_new_tab_content',
 
 		);
 
@@ -916,6 +932,30 @@ class CSPW_Settings {
 		echo '<option value="lista" ' . selected( $show_tabs, "lista" ) . '>' . __( 'Lista', 'cspw_woocommerce' ) . '</option>';
 
 		echo '</select>';
+	}
+	
+	/**
+	 * Call back for custom_new_tab
+	 *
+	 * @return void
+	 */
+	public function custom_new_tab_callback( $args ) {
+		$settings  = get_option( 'cspw_settings_custom_product' );
+
+		echo '<input type="text" id="custom_new_tab" name="cspw_settings_custom_product[custom_new_tab]" value="' . esc_attr__( $settings['custom_new_tab'], 'cspw_woocommerce' ) . '" />';
+		
+	}
+
+	/**
+	 * Call back for custom_new_tab_content
+	 *
+	 * @return void
+	 */
+	public function custom_new_tab_content_callback( $args ) {
+		$settings  = get_option( 'cspw_settings_custom_product' );
+
+		echo '<textarea id="custom_new_tab_content" name="cspw_settings_custom_product[custom_new_tab_content]" rows="10" cols="50" >' . esc_attr__( $settings['custom_new_tab_content'], 'cspw_woocommerce' ) . '</textarea>';
+		
 	}
 
 	/**
