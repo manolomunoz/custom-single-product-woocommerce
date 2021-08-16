@@ -26,8 +26,9 @@ defined( 'ABSPATH' ) || die( 'No script kiddies please!' );
 define( 'PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 
 require_once PLUGIN_PATH . '/admin/class-custom-single-product-setting.php';
-require_once PLUGIN_PATH . '/public/class-custom-single-product-public.php';
-require_once PLUGIN_PATH . '/public/class-custom-products-loop-public.php';
+require_once PLUGIN_PATH . '/public/custom-single-product-public.php';
+require_once PLUGIN_PATH . '/public/custom-products-loop-public.php';
+require_once PLUGIN_PATH . '/public/custom-general-configurations-public.php';
 
 
 add_action( 'plugins_loaded', 'cspw_plugin_init' );

@@ -1,6 +1,6 @@
 <?php
 /**
- * class-custom-single-product-public
+ * custom-single-product-public
  *
  * Custom single product template
  *
@@ -9,6 +9,10 @@
  * @package  public
  * @version  0.1
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 add_action( 'get_header', 'cspw_custom_single_product_functions' );
 /**

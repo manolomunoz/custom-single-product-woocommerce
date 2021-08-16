@@ -442,6 +442,7 @@ class CSPW_Settings {
 		$sanitary_values = array();
 
 		$settings_keys = array(
+			// INIT CONFIGURATIONS
 			// PRODUCTO INDIVIDUAL
 			'title',
 			'sku',
@@ -931,6 +932,8 @@ class CSPW_Settings {
 			}
 			#cspw_custom_show_tabs {
 				width: 200px;
+			}
+			
 			';
 		echo '</style>';
 	}

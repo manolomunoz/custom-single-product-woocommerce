@@ -1,6 +1,6 @@
 <?php
 /**
- * class-custom-products-loop-public
+ * custom-products-loop-public
  *
  * Custom single product template
  *
@@ -10,6 +10,9 @@
  * @version  0.1
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 add_action( 'get_header', 'cspw_custom_products_functions' );
 /**
@@ -31,8 +34,11 @@ function cspw_custom_products_functions() {
 		$custom_products_logo_button   = isset( $cspw_settings_custom_products['custom_products_logo_add_cart_button'] ) ? $cspw_settings_custom_products['custom_products_logo_add_cart_button'] : 'true';
 		$custom_products_button_text   = isset( $cspw_settings_custom_products['custom_products_button_text'] ) ? $cspw_settings_custom_products['custom_products_button_text'] : 'true';
 		
-		
-		if ( $custom_products_logo_button != 'true' || $custom_products_button_text != 'true' ) {
+		$cspw_settings_init = get_option( 'cspw_settings_init' );
+
+		$init_add_cart_go_checkout = isset( $cspw_settings_init['init_add_cart_go_checkout'] ) ? $cspw_settings_init['init_add_cart_go_checkout'] : 'true';
+			
+		if ( $custom_products_logo_button != 'true' || $custom_products_button_text != 'true' || $init_add_cart_go_checkout != 'true' ) {
 			remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart' );
 			add_action( 'woocommerce_after_shop_loop_item', 'cspw_products_custom_button' );
 		}
@@ -80,8 +86,8 @@ function misha_before_after_btn( $add_to_cart_html, $product, $args ){
 
 function cspw_products_custom_button( $args ) {
 	global $product;
-	$cspw_settings_custom_products        = get_option( 'cspw_settings_custom_products' );
-	$custom_products_logo_button = $cspw_settings_custom_products['custom_products_logo_add_cart_button'];
+	$cspw_settings_custom_products = get_option( 'cspw_settings_custom_products' );
+	$custom_products_logo_button   = $cspw_settings_custom_products['custom_products_logo_add_cart_button'];
 	$custom_products_logo_button   = isset( $cspw_settings_custom_products['custom_products_logo_add_cart_button'] ) ? $cspw_settings_custom_products['custom_products_logo_add_cart_button'] : 'true';
 	$custom_products_button_text   = isset( $cspw_settings_custom_products['custom_products_button_text'] ) ? $cspw_settings_custom_products['custom_products_button_text'] : 'true';
 
