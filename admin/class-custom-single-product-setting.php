@@ -287,15 +287,29 @@ class CSPW_Settings {
 			'cspw-settings-products'
 		);
 		add_settings_field(
+			'custom_products_logo_add_cart_button',
+			__( 'Añadir logo al botón añadir al carrito', 'cspw_woocommerce' ),
+			array( $this, 'custom_products_logo_add_cart_button_callback' ),
+			'cspw-settings-products',
+			'cspw_setting_section_products_button'
+		);
+		add_settings_field(
+			'custom_products_button_text',
+			__( 'Cambiar texto del botón', 'cspw_woocommerce' ),
+			array( $this, 'custom_products_button_text_callback' ),
+			'cspw-settings-products',
+			'cspw_setting_section_products_button'
+		);
+		add_settings_field(
 			'custom_products_button_before',
-			__( 'Añadir texto antes del precio', 'cspw_woocommerce' ),
+			__( 'Añadir texto antes del botón', 'cspw_woocommerce' ),
 			array( $this, 'custom_products_button_before_callback' ),
 			'cspw-settings-products',
 			'cspw_setting_section_products_button'
 		);
 		add_settings_field(
 			'custom_products_button_after',
-			__( 'Añadir texto después del precio', 'cspw_woocommerce' ),
+			__( 'Añadir texto después del botón', 'cspw_woocommerce' ),
 			array( $this, 'custom_products_button_after_callback' ),
 			'cspw-settings-products',
 			'cspw_setting_section_products_button'
@@ -420,6 +434,8 @@ class CSPW_Settings {
 			'loop_price',
 			'loop_image',
 			'loop_add_cart_button',
+			'custom_products_logo_add_cart_button',
+			'custom_products_button_text',
 			'custom_products_button_before',
 			'custom_products_button_after',
 			// PRODUCTO INDIVIDUAL POSICIÓN
@@ -668,6 +684,36 @@ class CSPW_Settings {
 	 */
 	public function cspw_section_info_products_button() {
 		esc_html_e( 'Personaliza la apariencia del botón.', 'cspw_woocommerce' );
+	}
+
+	/**
+	 * Call back for custom_products_logo_add_cart_button
+	 *
+	 * @return void
+	 */
+	public function custom_products_logo_add_cart_button_callback() {
+		$settings = get_option( 'cspw_settings_custom_products' );
+		?>
+		<label for="upload_image">
+			<input id="custom_products_logo_add_cart_button" type="text" size="36" name="cspw_settings_custom_products[custom_products_logo_add_cart_button]" value="<?php echo esc_attr__( $settings['custom_products_logo_add_cart_button'], 'cspw_woocommerce' );  ?>" />
+			<input id="upload_image_button_products" class="button" type="button" value="Seleccionar imagen" />
+			<br /><?php esc_html_e( 'Ingresa una URL o añade una imagen', 'cspw_woocommerce' ) ?>
+		</label>
+		<?php
+		wp_enqueue_media();
+		wp_register_script( 'my-admin-js', esc_url( plugins_url( 'admin/js/upload_file.js', dirname( __FILE__ ) ) ), array( 'jquery' ) );
+		wp_enqueue_script( 'my-admin-js' );
+	}
+
+	/**
+	 * Call back for custom_products_button_text
+	 *
+	 * @return void
+	 */
+	public function custom_products_button_text_callback() {
+		$settings = get_option( 'cspw_settings_custom_products' );
+		
+		echo '<input id="custom_products_button_text" name="cspw_settings_custom_products[custom_products_button_text]" size="40" type="text" value="' . esc_attr__( $settings['custom_products_button_text'], 'cspw_woocommerce' ) . '" />';
 	}
 
 	/**
