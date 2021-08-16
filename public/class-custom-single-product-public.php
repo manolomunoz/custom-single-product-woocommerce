@@ -32,12 +32,19 @@ function cspw_custom_products_functions() {
 		$tab_reviews     = isset( $cspw_settings['tab_reviews'] ) ? $cspw_settings['tab_reviews'] : 'true';
 		$related_product = isset( $cspw_settings['related_product'] ) ? $cspw_settings['related_product'] : 'true';
 
-		// ****************** MOSTRAR PRODUCTO ******************
-		$custom_logo_add_cart_button = isset( $cspw_settings['custom_logo_add_cart_button'] ) ? $cspw_settings['custom_logo_add_cart_button'] : 'true';
-		$custom_text_add_cart_button = isset( $cspw_settings['custom_text_add_cart_button'] ) ? $cspw_settings['custom_text_add_cart_button'] : 'true';
+		// ****************** MOSTRAR PRODUCTO PERSONALIZADO ******************
+		$custom_logo_add_cart_button        = isset( $cspw_settings['custom_logo_add_cart_button'] ) ? $cspw_settings['custom_logo_add_cart_button'] : 'true';
+		$custom_text_add_cart_button        = isset( $cspw_settings['custom_text_add_cart_button'] ) ? $cspw_settings['custom_text_add_cart_button'] : 'true';
 		$custom_text_before_add_cart_button = isset( $cspw_settings['custom_text_before_add_cart_button'] ) ? $cspw_settings['custom_text_before_add_cart_button'] : 'true';
 		$custom_text_after_add_cart_button = isset( $cspw_settings['custom_text_after_add_cart_button'] ) ? $cspw_settings['custom_text_after_add_cart_button'] : 'true';
+		$custom_price_before               = isset( $cspw_settings['custom_price_before'] ) ? $cspw_settings['custom_price_before'] : 'true';
+		$custom_price_after                = isset( $cspw_settings['custom_price_after'] ) ? $cspw_settings['custom_price_after'] : 'true';
 
+		
+		
+		if ( $custom_price_after != '' || $custom_price_before != '' ) {
+			add_filter( 'woocommerce_get_price_html', 'cspw_change_product_price_display' );
+		}
 		if ( $custom_logo_add_cart_button != '' || $custom_text_add_cart_button != '' || $custom_text_before_add_cart_button != '' || $custom_text_after_add_cart_button != '' ) {
 			remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
 			add_action( 'woocommerce_single_product_summary', 'cspw_product_custom_add_cart_button', 30 );
@@ -219,4 +226,18 @@ function cspw_product_custom_add_cart_button() {
 		<?php do_action( 'woocommerce_after_add_to_cart_form' ); ?>
 
 	<?php endif;
+}
+
+function cspw_change_product_price_display( $price ) {
+	$cspw_settings = get_option( 'cspw_settings' );
+	$before_text   = '';
+	$after_text    = '';
+	if ( isset( $cspw_settings['custom_price_before'] ) ) {
+		$before_text = '<p class="cspw-custom-text-before-price" >' . $cspw_settings['custom_price_before'] . '</p>';
+	}
+	if ( isset( $cspw_settings['custom_price_after'] ) ) {
+		$after_text = '<p class="cspw-custom-text-after-price" >' . $cspw_settings['custom_price_after'] . '</p>';
+	}
+	$new_price = '<div class="cspw-product-container-price">' . $before_text . ' ' . $price . ' ' . $after_text . '</div>';
+	return $new_price;
 }

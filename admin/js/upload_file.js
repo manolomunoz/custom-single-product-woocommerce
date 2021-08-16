@@ -29,7 +29,7 @@
 		    //When a file is selected, grab the URL and set it as the text field's value
 		    custom_uploader.on('select', function() {
 			  attachment = custom_uploader.state().get('selection').first().toJSON();
-			  $('#custom_logo_add_cart_button').val(attachment.url);
+			  $('#custom_logo_add_cart_button').attr('value', attachment.url);
 		    });
 	   
 		    //Open the uploader dialog

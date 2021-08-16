@@ -295,6 +295,28 @@ class CSPW_Settings {
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_button'
 		);
+		
+		/******************* PRICE ******************/
+		add_settings_section(
+			'cspw_setting_section_product_custom_price',
+			__( 'Configuración del precio', 'sync-ecommerce-course' ),
+			array( $this, 'cspw_section_product_price' ),
+			'cspw-settings-product-custom'
+		);
+		add_settings_field(
+			'custom_price_before',
+			__( 'Añadir texto antes del precio', 'sync-ecommerce-course' ),
+			array( $this, 'custom_price_before_callback' ),
+			'cspw-settings-product-custom',
+			'cspw_setting_section_product_custom_price'
+		);
+		add_settings_field(
+			'custom_price_after',
+			__( 'Añadir texto después del precio', 'sync-ecommerce-course' ),
+			array( $this, 'custom_price_after_callback' ),
+			'cspw-settings-product-custom',
+			'cspw_setting_section_product_custom_price'
+		);
 
 	}
 
@@ -332,6 +354,8 @@ class CSPW_Settings {
 			'custom_text_add_cart_button',
 			'custom_text_before_add_cart_button',
 			'custom_text_after_add_cart_button',
+			'custom_price_before',
+			'custom_price_after',
 
 		);
 
@@ -562,7 +586,7 @@ class CSPW_Settings {
 		echo '<input type="checkbox" id="cspw_loop_add_cart_button" name="cspw_settings[loop_add_cart_button]" value="1"' . checked( 1, $settings['loop_add_cart_button'], false ) . '/>';
 	}
 
-	/****************** PRODUCTO INDIVIDUAL POSICIÓN ******************/
+	/****************** PRODUCTO INDIVIDUAL PERSONALIZACIÓN ******************/
 	/**
 	 * Info for holded automate section.
 	 *
@@ -581,9 +605,8 @@ class CSPW_Settings {
 		$settings = get_option( 'cspw_settings' );
 		?>
 		<label for="upload_image">
-			<input id="custom_logo_add_cart_button" type="text" size="36" name="cspw_settings[custom_logo_add_cart_button]" value="<?php esc_attr( $settings['custom_logo_add_cart_button'] ) ?>" /> 
+			<input id="custom_logo_add_cart_button" type="text" size="36" name="cspw_settings[custom_logo_add_cart_button]" value="<?php echo $settings['custom_logo_add_cart_button'] ?>" />
 			<input id="upload_image_button" class="button" type="button" value="Seleccionar imagen" />
-			<?php echo 'Imagen seleccionada --> ' . $settings['custom_logo_add_cart_button']; ?>
 			<br />Ingresa una URL o añade una imagen
 		</label>
 		<?php
@@ -625,6 +648,37 @@ class CSPW_Settings {
 		$settings = get_option( 'cspw_settings' );
 		
 		echo '<input id="custom_text_after_add_cart_button" name="cspw_settings[custom_text_after_add_cart_button]" size="40" type="text" value="' . $settings['custom_text_after_add_cart_button'] . '" />';
+	}
+
+	/**
+	 * Info for holded automate section.
+	 *
+	 * @return void
+	 */
+	public function cspw_section_product_price() {
+		esc_html_e( 'Configuración del precio.', 'sync-ecommerce-course' );
+	}
+
+	/**
+	 * Call back for custom_price_before
+	 *
+	 * @return void
+	 */
+	public function custom_price_before_callback() {
+		$settings = get_option( 'cspw_settings' );
+		
+		echo '<input id="custom_price_before" name="cspw_settings[custom_price_before]" size="40" type="text" value="' . $settings['custom_price_before'] . '" />';
+	}
+
+	/**
+	 * Call back for custom_price_after
+	 *
+	 * @return void
+	 */
+	public function custom_price_after_callback() {
+		$settings = get_option( 'cspw_settings' );
+		
+		echo '<input id="custom_price_after" name="cspw_settings[custom_price_after]" size="40" type="text" value="' . $settings['custom_price_after'] . '" />';
 	}
 
 	/**
