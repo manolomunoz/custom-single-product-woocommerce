@@ -23,6 +23,7 @@ class CSPW_Settings {
 	 */
 	private $cspw_settings;
 	private $cspw_settings_custom_product;
+	private $cspw_settings_custom_products;
 
 	/**
 	 * Construct of class
@@ -56,8 +57,9 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function create_admin_page() {
-		$this->cspw_settings                = get_option( 'cspw_settings' ); 
-		$this->cspw_settings_custom_product = get_option( 'cspw_settings_custom_product' );
+		$this->cspw_settings                 = get_option( 'cspw_settings' ); 
+		$this->cspw_settings_custom_product  = get_option( 'cspw_settings_custom_product' );
+		$this->cspw_settings_custom_products = get_option( 'cspw_settings_custom_products' );
 		?>
 
 		<div class="wrap">
@@ -97,7 +99,7 @@ class CSPW_Settings {
 			<?php	if ( 'products_settings' === $active_tab ) { ?>
 				<form method="post" action="options.php">
 					<?php
-					settings_fields( 'cspw_settings' );
+					settings_fields( 'cspw_settings_custom_products' );
 					do_settings_sections( 'cspw-settings-products' );
 					submit_button();
 					?>
@@ -124,6 +126,13 @@ class CSPW_Settings {
 		register_setting(
 			'cspw_settings_custom_product',
 			'cspw_settings_custom_product',
+			array( $this, 'sanitize_fields' )
+		);
+		
+		// Custom product Settings.
+		register_setting(
+			'cspw_settings_custom_products',
+			'cspw_settings_custom_products',
 			array( $this, 'sanitize_fields' )
 		);
 
@@ -270,6 +279,28 @@ class CSPW_Settings {
 			'cspw_setting_section_products'
 		);
 
+		/********** ADD CART BUTTON **********/
+		add_settings_section(
+			'cspw_setting_section_products_button',
+			__( 'Configuración del botón de añadir al carrito', 'cspw_woocommerce' ),
+			array( $this, 'cspw_section_info_products_button' ),
+			'cspw-settings-products'
+		);
+		add_settings_field(
+			'custom_products_button_before',
+			__( 'Añadir texto antes del precio', 'cspw_woocommerce' ),
+			array( $this, 'custom_products_button_before_callback' ),
+			'cspw-settings-products',
+			'cspw_setting_section_products_button'
+		);
+		add_settings_field(
+			'custom_products_button_after',
+			__( 'Añadir texto después del precio', 'cspw_woocommerce' ),
+			array( $this, 'custom_products_button_after_callback' ),
+			'cspw-settings-products',
+			'cspw_setting_section_products_button'
+		);
+
 		// ***************************************************** PRODUCTO INDIVIDUAL POSITIONS *****************************************************
 		add_settings_section(
 			'cspw_setting_section_product_custom_button',
@@ -343,7 +374,7 @@ class CSPW_Settings {
 			'cspw_setting_section_product_custom_image'
 		);
 
-		/******************* TASB ******************/
+		/******************* TABS ******************/
 		add_settings_section(
 			'cspw_setting_section_product_custom_tabs',
 			__( 'Configuración de la imagen', 'cspw_woocommerce' ),
@@ -389,6 +420,8 @@ class CSPW_Settings {
 			'loop_price',
 			'loop_image',
 			'loop_add_cart_button',
+			'custom_products_button_before',
+			'custom_products_button_after',
 			// PRODUCTO INDIVIDUAL POSICIÓN
 			'custom_logo_add_cart_button',
 			'custom_text_add_cart_button',
@@ -568,9 +601,9 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function results_callback() {
-		$settings = get_option( 'cspw_settings' );
+		$settings = get_option( 'cspw_settings_custom_products' );
 		
-		echo '<input type="checkbox" id="cspw_results" name="cspw_settings[results]" value="1"' . checked( 1, $settings['results'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_results" name="cspw_settings_custom_products[results]" value="1"' . checked( 1, $settings['results'], false ) . '/>';
 	}
 
 	/**
@@ -579,9 +612,9 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function order_callback() {
-		$settings = get_option( 'cspw_settings' );
+		$settings = get_option( 'cspw_settings_custom_products' );
 		
-		echo '<input type="checkbox" id="cspw_order" name="cspw_settings[order]" value="1"' . checked( 1, $settings['order'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_order" name="cspw_settings_custom_products[order]" value="1"' . checked( 1, $settings['order'], false ) . '/>';
 	}
 	
 	/**
@@ -590,9 +623,9 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function loop_title_callback() {
-		$settings = get_option( 'cspw_settings' );
+		$settings = get_option( 'cspw_settings_custom_products' );
 		
-		echo '<input type="checkbox" id="cspw_loop_title" name="cspw_settings[loop_title]" value="1"' . checked( 1, $settings['loop_title'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_loop_title" name="cspw_settings_custom_products[loop_title]" value="1"' . checked( 1, $settings['loop_title'], false ) . '/>';
 	}
 
 	/**
@@ -601,9 +634,9 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function loop_price_callback() {
-		$settings = get_option( 'cspw_settings' );
+		$settings = get_option( 'cspw_settings_custom_products' );
 		
-		echo '<input type="checkbox" id="cspw_loop_price" name="cspw_settings[loop_price]" value="1"' . checked( 1, $settings['loop_price'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_loop_price" name="cspw_settings_custom_products[loop_price]" value="1"' . checked( 1, $settings['loop_price'], false ) . '/>';
 	}
 
 	/**
@@ -612,9 +645,9 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function loop_image_callback() {
-		$settings = get_option( 'cspw_settings' );
+		$settings = get_option( 'cspw_settings_custom_products' );
 		
-		echo '<input type="checkbox" id="cspw_loop_image" name="cspw_settings[loop_image]" value="1"' . checked( 1, $settings['loop_image'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_loop_image" name="cspw_settings_custom_products[loop_image]" value="1"' . checked( 1, $settings['loop_image'], false ) . '/>';
 	}
 
 	/**
@@ -623,9 +656,40 @@ class CSPW_Settings {
 	 * @return void
 	 */
 	public function loop_add_cart_button_callback() {
-		$settings = get_option( 'cspw_settings' );
+		$settings = get_option( 'cspw_settings_custom_products' );
 		
-		echo '<input type="checkbox" id="cspw_loop_add_cart_button" name="cspw_settings[loop_add_cart_button]" value="1"' . checked( 1, $settings['loop_add_cart_button'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_loop_add_cart_button" name="cspw_settings_custom_products[loop_add_cart_button]" value="1"' . checked( 1, $settings['loop_add_cart_button'], false ) . '/>';
+	}
+
+	/**
+	 * Info for holded automate section.
+	 *
+	 * @return void
+	 */
+	public function cspw_section_info_products_button() {
+		esc_html_e( 'Personaliza la apariencia del botón.', 'cspw_woocommerce' );
+	}
+
+	/**
+	 * Call back for custom_products_button_before
+	 *
+	 * @return void
+	 */
+	public function custom_products_button_before_callback() {
+		$settings = get_option( 'cspw_settings_custom_products' );
+		
+		echo '<input id="custom_products_button_before" name="cspw_settings_custom_products[custom_products_button_before]" size="40" type="text" value="' . esc_attr__( $settings['custom_products_button_before'], 'cspw_woocommerce' ) . '" />';
+	}
+
+	/**
+	 * Call back for custom_products_button_after
+	 *
+	 * @return void
+	 */
+	public function custom_products_button_after_callback() {
+		$settings = get_option( 'cspw_settings_custom_products' );
+		
+		echo '<input id="custom_products_button_after" name="cspw_settings_custom_products[custom_products_button_after]" size="40" type="text" value="' . esc_attr__( $settings['custom_products_button_after'], 'cspw_woocommerce' ) . '" />';
 	}
 
 	/****************** PRODUCTO INDIVIDUAL PERSONALIZACIÓN ******************/
