@@ -12,7 +12,7 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  *
  * @package     Custom Single Product Woocommerce
- * @author      Manuel Muñoz Rodríguez
+ * @author      Manuel Muñoz Rodríguez <mmr010496@gmail.com>
  * @copyright   2021
  * @license     GPL-2.0+
  *
