@@ -444,6 +444,21 @@ class CSPW_Settings {
 			'cspw_setting_section_product_custom_tabs'
 		);
 
+		/******************* RELATED PRODUCTS ******************/
+		add_settings_section(
+			'cspw_setting_section_product_related_product',
+			__( 'Configuración de los productos relacionados', 'cspw_woocommerce' ),
+			array( $this, 'cspw_section_product_related_product' ),
+			'cspw-settings-product-custom'
+		);
+		add_settings_field(
+			'custom_show_related_product_button',
+			__( 'Quitar "Añadir al carrito" de los productos relacionados', 'cspw_woocommerce' ),
+			array( $this, 'custom_show_related_product_button_callback' ),
+			'cspw-settings-product-custom',
+			'cspw_setting_section_product_related_product'
+		);
+
 	}
 
 	/**
@@ -491,6 +506,7 @@ class CSPW_Settings {
 			'custom_show_tabs',
 			'custom_new_tab',
 			'custom_new_tab_content',
+			'custom_show_related_product_button',
 
 		);
 
@@ -956,6 +972,26 @@ class CSPW_Settings {
 
 		echo '<textarea id="custom_new_tab_content" name="cspw_settings_custom_product[custom_new_tab_content]" rows="10" cols="50" >' . esc_attr__( $settings['custom_new_tab_content'], 'cspw_woocommerce' ) . '</textarea>';
 		
+	}
+
+	/**
+	 * Info for holded automate section.
+	 *
+	 * @return void
+	 */
+	public function cspw_section_product_related_product() {
+		esc_html_e( 'Configura la vista de los productos relacionados.', 'cspw_woocommerce' );
+	}
+
+	/**
+	 * Call back for custom_show_related_product_button
+	 *
+	 * @return void
+	 */
+	public function custom_show_related_product_button_callback() {
+		$settings = get_option( 'cspw_settings_custom_product' );
+		
+		echo '<input type="checkbox" id="cspw_custom_show_related_product_button" name="cspw_settings_custom_product[custom_show_related_product_button]" value="1"' . checked( 1, $settings['custom_show_related_product_button'], false ) . '/>';
 	}
 
 	/**

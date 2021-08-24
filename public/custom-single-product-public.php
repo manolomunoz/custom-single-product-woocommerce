@@ -47,7 +47,11 @@ function cspw_custom_single_product_functions() {
 		$custom_image_zoom                  = isset( $cspw_settings_custom_product['custom_image_zoom'] ) ? $cspw_settings_custom_product['custom_image_zoom'] : 'true';
 		$custom_show_tabs                   = isset( $cspw_settings_custom_product['custom_show_tabs'] ) ? $cspw_settings_custom_product['custom_show_tabs'] : 'true';
 		$custom_new_tab                     = isset( $cspw_settings_custom_product['custom_new_tab'] ) ? $cspw_settings_custom_product['custom_new_tab'] : 'true';
+		$custom_show_related_product_button = isset( $cspw_settings_custom_product['custom_show_related_product_button'] ) ? $cspw_settings_custom_product['custom_show_related_product_button'] : 'true';
 
+		if ( $custom_show_related_product_button == 1 ) {
+			remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
+		}
 		if ( strlen($custom_new_tab) > 0 ) {
 			add_filter( 'woocommerce_product_tabs', 'cspw_new_product_tab' );
 		}
