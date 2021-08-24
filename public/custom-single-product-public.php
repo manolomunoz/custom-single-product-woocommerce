@@ -21,8 +21,8 @@ add_action( 'get_header', 'cspw_custom_single_product_functions' );
  * @return void
  */
 function cspw_custom_single_product_functions() {
-	$cspw_settings                  = get_option( 'cspw_settings' );
-	$cspw_settings_custom_product   = get_option( 'cspw_settings_custom_product' );
+	$cspw_settings                = get_option( 'cspw_settings' );
+	$cspw_settings_custom_product = get_option( 'cspw_settings_custom_product' );
 	if ( is_product() ) {
 		// ****************** MOSTRAR PRODUCTO ******************
 		$title           = isset( $cspw_settings['title'] ) ? $cspw_settings['title'] : 'true';
@@ -48,7 +48,11 @@ function cspw_custom_single_product_functions() {
 		$custom_show_tabs                   = isset( $cspw_settings_custom_product['custom_show_tabs'] ) ? $cspw_settings_custom_product['custom_show_tabs'] : 'true';
 		$custom_new_tab                     = isset( $cspw_settings_custom_product['custom_new_tab'] ) ? $cspw_settings_custom_product['custom_new_tab'] : 'true';
 		$custom_show_related_product_button = isset( $cspw_settings_custom_product['custom_show_related_product_button'] ) ? $cspw_settings_custom_product['custom_show_related_product_button'] : 'true';
+		$custom_show_product_custom_comment = isset( $cspw_settings_custom_product['custom_show_product_custom_comment'] ) ? $cspw_settings_custom_product['custom_show_product_custom_comment'] : 'true';
 
+		if ( $custom_show_product_custom_comment == 3 || $custom_show_product_custom_comment == 2  ) {
+			add_filter( 'get_comment_author', 'cspw_product_custom_user_name_comment', 10, 3 );
+		}
 		if ( $custom_show_related_product_button == 1 ) {
 			remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
 		}
@@ -104,6 +108,44 @@ function cspw_custom_single_product_functions() {
 		}
 		
 	}
+}
+
+/**
+ * Custom author comment in single product
+ *
+ * @param [type] $author author this comment.
+ * @param [type] $comment_id id this comment.
+ * @param [type] $comment string comment.
+ * @return object return the author name.
+ */
+function cspw_product_custom_user_name_comment( $author, $comment_id, $comment ) {
+	$cspw_settings_custom_product = get_option( 'cspw_settings_custom_product' );
+
+	$custom_show_product_custom_comment = isset( $cspw_settings_custom_product['custom_show_product_custom_comment'] ) ? $cspw_settings_custom_product['custom_show_product_custom_comment'] : 'true';
+
+	$firstname   = '';
+	$lastname    = '';
+	$author_name = $comment->comment_author;
+
+	if ( $author_name ) {
+		$nombre_partes = explode( ' ', $author_name );
+		$firstname     = $nombre_partes[0];
+		$lastname      = $nombre_partes[1];
+		if ( $custom_show_product_custom_comment == 3 ) {
+			if ( $lastname ) {
+				$custom_lastname = substr( $lastname, 0, 1 );
+				$author          = $firstname . ' ' . $custom_lastname . '.';
+			} else {
+				$author = $firstname;
+			}
+		}
+		if ( $custom_show_product_custom_comment == 2 ) {
+			$custom_firstname = substr( $firstname, 0, 1 );
+			$author           = $custom_firstname . '. ' . $lastname;
+		}
+	}
+
+	return $author;
 }
 
 /**

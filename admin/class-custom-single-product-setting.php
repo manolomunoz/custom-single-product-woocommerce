@@ -459,6 +459,21 @@ class CSPW_Settings {
 			'cspw_setting_section_product_related_product'
 		);
 
+		/******************* COMMENTS ******************/
+		add_settings_section(
+			'cspw_setting_section_product_comments',
+			__( 'Configuración de los comentarios', 'cspw_woocommerce' ),
+			array( $this, 'cspw_section_product_comments' ),
+			'cspw-settings-product-custom'
+		);
+		add_settings_field(
+			'custom_show_product_custom_comment',
+			__( 'Modo de visualización de los comentarios', 'cspw_woocommerce' ),
+			array( $this, 'custom_show_product_custom_comment_callback' ),
+			'cspw-settings-product-custom',
+			'cspw_setting_section_product_comments'
+		);
+
 	}
 
 	/**
@@ -507,6 +522,7 @@ class CSPW_Settings {
 			'custom_new_tab',
 			'custom_new_tab_content',
 			'custom_show_related_product_button',
+			'custom_show_product_custom_comment',
 
 		);
 
@@ -992,6 +1008,30 @@ class CSPW_Settings {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		
 		echo '<input type="checkbox" id="cspw_custom_show_related_product_button" name="cspw_settings_custom_product[custom_show_related_product_button]" value="1"' . checked( 1, $settings['custom_show_related_product_button'], false ) . '/>';
+	}
+
+	/**
+	 * Info for holded automate section.
+	 *
+	 * @return void
+	 */
+	public function cspw_section_product_comments() {
+		esc_html_e( 'Configura la vista de los comentarios para una mejor visión de usuario.', 'cspw_woocommerce' );
+	}
+
+	/**
+	 * Call back for custom_show_product_custom_comment
+	 *
+	 * @return void
+	 */
+	public function custom_show_product_custom_comment_callback() {
+		$settings = get_option( 'cspw_settings_custom_product' );
+		
+		echo '<input type="radio" name="cspw_settings_custom_product[custom_show_product_custom_comment]" value="1" ' . checked( 1, $settings['custom_show_product_custom_comment'], false ) . ' />Por defecto';
+		echo '<br>';
+		echo '<input type="radio" name="cspw_settings_custom_product[custom_show_product_custom_comment]" value="2" ' . checked( 2, $settings['custom_show_product_custom_comment'], false ) . ' />Nombre abreviado, apellido largo. Ejemplo: R. Nadal';
+		echo '<br>';
+		echo '<input type="radio" name="cspw_settings_custom_product[custom_show_product_custom_comment]" value="3" ' . checked( 3, $settings['custom_show_product_custom_comment'], false ) . ' />Nombre completo, apellido abreviado. Ejemplo: Rafael N.';
 	}
 
 	/**
