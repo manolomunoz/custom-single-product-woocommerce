@@ -48,7 +48,7 @@ function cspw_custom_single_product_functions() {
 		$custom_show_tabs                   = isset( $cspw_settings_custom_product['custom_show_tabs'] ) ? $cspw_settings_custom_product['custom_show_tabs'] : 'true';
 		$custom_new_tab                     = isset( $cspw_settings_custom_product['custom_new_tab'] ) ? $cspw_settings_custom_product['custom_new_tab'] : 'true';
 
-		if ( $custom_new_tab != 'true' ) {
+		if ( strlen($custom_new_tab) > 0 ) {
 			add_filter( 'woocommerce_product_tabs', 'cspw_new_product_tab' );
 		}
 		if ( $custom_show_tabs == 'lista' ) {
@@ -249,13 +249,15 @@ function cspw_change_product_price_display( $price ) {
  */
 function cspw_show_tabs_list() {
 	global $product;
-	$cspw_settings_custom_product   = get_option( 'cspw_settings_custom_product' );
-	$cspw_settings                  = get_option( 'cspw_settings' );
-	$tab_description                = $cspw_settings['tab_description'];
-	$tab_aditional                  = $cspw_settings['tab_aditional'];
-	$tab_reviews                    = $cspw_settings['tab_reviews'];
+	$cspw_settings   = get_option( 'cspw_settings' );
+	$tab_description = $cspw_settings['tab_description'];
+	$tab_aditional   = $cspw_settings['tab_aditional'];
+	$tab_reviews     = $cspw_settings['tab_reviews'];
 
-	echo '<div class="cspw-product-custom-tabs">';
+	$cspw_settings_custom_product = get_option( 'cspw_settings_custom_product' );
+	$custom_new_tab               = $cspw_settings_custom_product['custom_new_tab'];
+
+	echo '<div style="display: inline-block;" class="cspw-product-custom-tabs">';
 
 	if ( $tab_description != 1 ) {
 		echo '<div class="cspw-product-custom-descripton">';
@@ -393,6 +395,12 @@ function cspw_show_tabs_list() {
 			<div class="clear"></div>
 		</div>
 		<?php
+	}
+	if ( strlen($custom_new_tab) > 0 ) {
+		echo '<div class="cspw-product-custom-new-tab">';
+		echo '<h3>' . $custom_new_tab . '</h3>';
+		echo cspw_new_product_tab_content();
+		echo '</div>';
 	}
 
 	echo '</div>';

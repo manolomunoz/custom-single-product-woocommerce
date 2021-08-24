@@ -35,10 +35,8 @@ function cspw_custom_products_functions() {
 		$custom_products_button_text   = isset( $cspw_settings_custom_products['custom_products_button_text'] ) ? $cspw_settings_custom_products['custom_products_button_text'] : 'true';
 		
 		$cspw_settings_init = get_option( 'cspw_settings_init' );
-
-		$init_add_cart_go_checkout = isset( $cspw_settings_init['init_add_cart_go_checkout'] ) ? $cspw_settings_init['init_add_cart_go_checkout'] : 'true';
 			
-		if ( $custom_products_logo_button != 'true' || $custom_products_button_text != 'true' || $init_add_cart_go_checkout != 'true' ) {
+		if ( strlen($custom_products_logo_button) > 0 || strlen($custom_products_button_text) > 0 ) {
 			remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart' );
 			add_action( 'woocommerce_after_shop_loop_item', 'cspw_products_custom_button' );
 		}
@@ -60,24 +58,24 @@ function cspw_custom_products_functions() {
 		if ( $loop_add_cart_button == 1 ) {
 			remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart' );
 		}
-		if ( $custom_products_button_before != 'true' || $custom_products_button_after != 'true' ) {
-			add_filter( 'woocommerce_loop_add_to_cart_link', 'misha_before_after_btn', 10, 3 );
+		if ( strlen($custom_products_button_before) > 0 || strlen($custom_products_button_after) > 0 ) {
+			add_filter( 'woocommerce_loop_add_to_cart_link', 'cspw_before_after_btn', 10, 3 );
 		}
 		
 	}
 }
 
-function misha_before_after_btn( $add_to_cart_html, $product, $args ){
+function cspw_before_after_btn( $add_to_cart_html, $product, $args ){
 	$cspw_settings_custom_products = get_option( 'cspw_settings_custom_products' );
 	$custom_products_button_before = $cspw_settings_custom_products['custom_products_button_before'];
 	$custom_products_button_after  = $cspw_settings_custom_products['custom_products_button_after'];
 
 	$before = '';
-	if ( $custom_products_button_before != 'true' ) {
+	if ( strlen($custom_products_button_before) > 0 ) {
 		$before = '<p class="cspw-products-button-before">' . $custom_products_button_before . '</p>';
 	}
 	$after = '';
-	if ( $custom_products_button_after != 'true' ) {
+	if ( strlen($custom_products_button_after) > 0 ) {
 		$after = '<p class="cspw-products-button-after">' . $custom_products_button_after . '</p>';
 	}
 
@@ -96,7 +94,7 @@ function cspw_products_custom_button( $args ) {
 		$logo = '<img class="cspw-products-button-logo" style="width:50px;heigth=50px;" src="' . $custom_products_logo_button . '" />';
 	}
 	$text = $product->add_to_cart_text();
-	if ( $custom_products_button_text != 'true' ) {
+	if ( strlen($custom_products_button_text) > 0 ) {
 		$text = $custom_products_button_text;
 	}
 
