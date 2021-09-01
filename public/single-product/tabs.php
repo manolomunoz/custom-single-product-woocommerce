@@ -17,10 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 add_action( 'woocommerce_after_single_product_summary', function() {
 	global $product;
-	$cspw_settings   = get_option( 'cspw_settings' );
-	$tab_description = $cspw_settings['tab_description'];
-	$tab_aditional   = $cspw_settings['tab_aditional'];
-	$tab_reviews     = $cspw_settings['tab_reviews'];
+	$cspw_settings_custom_product = get_option( 'cspw_settings_custom_product' );
+
+	$tab_description = $cspw_settings_custom_product['tab_description'];
+	$tab_aditional   = $cspw_settings_custom_product['tab_aditional'];
+	$tab_reviews     = $cspw_settings_custom_product['tab_reviews'];
 
 	$cspw_settings_custom_product = get_option( 'cspw_settings_custom_product' );
 	$custom_new_tab               = $cspw_settings_custom_product['custom_new_tab'];

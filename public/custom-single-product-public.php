@@ -21,21 +21,20 @@ add_action( 'get_header', 'cspw_custom_single_product_functions' );
  * @return void
  */
 function cspw_custom_single_product_functions() {
-	$cspw_settings                = get_option( 'cspw_settings' );
 	$cspw_settings_custom_product = get_option( 'cspw_settings_custom_product' );
 	if ( is_product() ) {
 		// ****************** MOSTRAR PRODUCTO ******************
-		$title           = isset( $cspw_settings['title'] ) ? $cspw_settings['title'] : 'true';
-		$show_sku        = isset( $cspw_settings['sku'] ) ? $cspw_settings['sku'] : 'true';
-		$categories      = isset( $cspw_settings['categories'] ) ? $cspw_settings['categories'] : 'true';
-		$excerpt         = isset( $cspw_settings['excerpt'] ) ? $cspw_settings['excerpt'] : 'true';
-		$price           = isset( $cspw_settings['price'] ) ? $cspw_settings['price'] : 'true';
-		$image           = isset( $cspw_settings['image'] ) ? $cspw_settings['image'] : 'true';
-		$add_cart_button = isset( $cspw_settings['add_cart_button'] ) ? $cspw_settings['add_cart_button'] : 'true';
-		$tab_description = isset( $cspw_settings['tab_description'] ) ? $cspw_settings['tab_description'] : 'true';
-		$tab_aditional   = isset( $cspw_settings['tab_aditional'] ) ? $cspw_settings['tab_aditional'] : 'true';
-		$tab_reviews     = isset( $cspw_settings['tab_reviews'] ) ? $cspw_settings['tab_reviews'] : 'true';
-		$related_product = isset( $cspw_settings['related_product'] ) ? $cspw_settings['related_product'] : 'true';
+		$title           = isset( $cspw_settings_custom_product['title'] ) ? $cspw_settings_custom_product['title'] : 'true';
+		$show_sku        = isset( $cspw_settings_custom_product['sku'] ) ? $cspw_settings_custom_product['sku'] : 'true';
+		$categories      = isset( $cspw_settings_custom_product['categories'] ) ? $cspw_settings_custom_product['categories'] : 'true';
+		$excerpt         = isset( $cspw_settings_custom_product['excerpt'] ) ? $cspw_settings_custom_product['excerpt'] : 'true';
+		$price           = isset( $cspw_settings_custom_product['price'] ) ? $cspw_settings_custom_product['price'] : 'true';
+		$image           = isset( $cspw_settings_custom_product['image'] ) ? $cspw_settings_custom_product['image'] : 'true';
+		$add_cart_button = isset( $cspw_settings_custom_product['add_cart_button'] ) ? $cspw_settings_custom_product['add_cart_button'] : 'true';
+		$tab_description = isset( $cspw_settings_custom_product['tab_description'] ) ? $cspw_settings_custom_product['tab_description'] : 'true';
+		$tab_aditional   = isset( $cspw_settings_custom_product['tab_aditional'] ) ? $cspw_settings_custom_product['tab_aditional'] : 'true';
+		$tab_reviews     = isset( $cspw_settings_custom_product['tab_reviews'] ) ? $cspw_settings_custom_product['tab_reviews'] : 'true';
+		$related_product = isset( $cspw_settings_custom_product['related_product'] ) ? $cspw_settings_custom_product['related_product'] : 'true';
 
 		// ****************** MOSTRAR PRODUCTO PERSONALIZADO ******************
 		$custom_logo_add_cart_button        = isset( $cspw_settings_custom_product['custom_logo_add_cart_button'] ) ? $cspw_settings_custom_product['custom_logo_add_cart_button'] : 'true';
