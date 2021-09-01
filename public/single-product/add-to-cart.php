@@ -5,7 +5,7 @@
  * Custom add to cart button in single product
  *
  * @author   Manuel Muñoz <mmr010496@gmail.com>
- * @category WordPress
+ * @category Functions
  * @package  WordPress
  * @version  0.1
  */

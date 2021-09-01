@@ -1,12 +1,12 @@
 <?php
 /**
- * custom-products-loop-public
+ * Custom products loop public
  *
  * Custom single product template
  *
  * @author   Manuel Muñoz Rodríguez
- * @category public
- * @package  public
+ * @category Functions
+ * @package  WordPress
  * @version  0.1
  */
 

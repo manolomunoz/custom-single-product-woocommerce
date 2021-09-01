@@ -1,12 +1,12 @@
 <?php
 /**
- * custom-single-product-setting
+ * Custom single product setting
  *
  * Show configuration menu in administrator part
  *
  * @author   Manuel Muñoz Rodríguez
- * @category admin
- * @package  admin
+ * @category Functions
+ * @package  Admin
  * @version  0.1
  */
 

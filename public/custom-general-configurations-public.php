@@ -1,12 +1,12 @@
 <?php
 /**
- * custom-general-configurations-public
+ * Custom general configurations public
  *
  * Custom single product template
  *
  * @author   Manuel Muñoz Rodríguez
- * @category public
- * @package  public
+ * @category Functions
+ * @package  WordPress
  * @version  0.1
  */
 
