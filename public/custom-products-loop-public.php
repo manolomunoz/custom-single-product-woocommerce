@@ -22,7 +22,7 @@ add_action( 'get_header', 'cspw_custom_products_functions' );
  */
 function cspw_custom_products_functions() {
 	$cspw_settings_custom_products = get_option( 'cspw_settings_custom_products' );
-	if ( is_shop() || is_product_category() ) {
+	if ( woocommerce_product_loop() ) {
 		$results                       = isset( $cspw_settings_custom_products['results'] ) ? $cspw_settings_custom_products['results'] : 'true';
 		$order                         = isset( $cspw_settings_custom_products['order'] ) ? $cspw_settings_custom_products['order'] : 'true';
 		$loop_title                    = isset( $cspw_settings_custom_products['loop_title'] ) ? $cspw_settings_custom_products['loop_title'] : 'true';
