@@ -65,6 +65,14 @@ function cspw_custom_products_functions() {
 	}
 }
 
+/**
+ * Add text after and before add to cart button
+ *
+ * @param string $add_to_cart_html the add to cart button html.
+ * @param object $product product actual object.
+ * @param array  $args array arguments to product.
+ * @return string return the new add to cart html
+ */
 function cspw_before_after_btn( $add_to_cart_html, $product, $args ){
 	$cspw_settings_custom_products = get_option( 'cspw_settings_custom_products' );
 	$custom_products_button_before = $cspw_settings_custom_products['custom_products_button_before'];
@@ -82,6 +90,12 @@ function cspw_before_after_btn( $add_to_cart_html, $product, $args ){
 	return $before . $add_to_cart_html . $after;
 }
 
+/**
+ * Custom add to cart button in loop products
+ *
+ * @param array $args arguments to product
+ * @return void
+ */
 function cspw_products_custom_button( $args ) {
 	global $product;
 	$cspw_settings_custom_products = get_option( 'cspw_settings_custom_products' );
