@@ -193,7 +193,7 @@ function cspw_remove_product_tab_aditional( $tabs ) {
 	return $tabs;
 }
 
-  /**
+/**
  * Remove tabs in single product
  *
  * @param [type] $tabs
@@ -204,6 +204,11 @@ function cspw_remove_product_tab_reviews( $tabs ) {
 	return $tabs;
 }
 
+/**
+ * Custom price in single product
+ *
+ * @return void
+ */
 function cspw_change_product_price_display() {
 	global $product;
 
@@ -220,6 +225,12 @@ function cspw_change_product_price_display() {
 	echo $new_price;
 }
 
+/**
+ * New tab in single product
+ *
+ * @param array $tabs array tabs in single product.
+ * @return array return the new array tabs
+ */
 function cspw_new_product_tab( $tabs ) {
 	$cspw_settings_custom_product = get_option( 'cspw_settings_custom_product' );
 	$custom_new_tab               = $cspw_settings_custom_product['custom_new_tab'];
@@ -233,11 +244,15 @@ function cspw_new_product_tab( $tabs ) {
 	return $tabs;
 }
 
+/**
+ * Add content in new tab in single product
+ *
+ * @return void
+ */
 function cspw_new_product_tab_content() {
 	$cspw_settings_custom_product = get_option( 'cspw_settings_custom_product' );
 	$custom_new_tab_content       = isset( $cspw_settings_custom_product['custom_new_tab_content'] ) ? $cspw_settings_custom_product['custom_new_tab_content'] : 'true';
 	if ( $custom_new_tab_content != 'true' ) {
 		echo $custom_new_tab_content;
 	}
-	
 }
