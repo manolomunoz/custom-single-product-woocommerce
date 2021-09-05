@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: Custom Single Product Woocommerce
+ * Plugin Name: Custom Single Product WC
  * Plugin URI:  
- * Description: Custom position and show element in woocommerce.
+ * Description: Customize woocommerce products and add custom content.
  * Version:     0.1
  * Author:      Manuel Muñoz Rodríguez
- * Author URI:  
+ * Author URI:  https://github.com/manolomunoz
  * Text Domain: woocommerce
  * Domain Path: /languages
  * License:     GPL-2.0+

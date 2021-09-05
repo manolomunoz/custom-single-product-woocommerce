@@ -1,4 +1,4 @@
-=== Custom Single Product Woocommerce ===
+=== Custom Single Product WC ===
 Contributors: manolomunoz
 Tags: woocommerce, single product, custom single product, custom products woocommerce, custom product woocommerce, custom single product woocommerce
 Donate link: 
