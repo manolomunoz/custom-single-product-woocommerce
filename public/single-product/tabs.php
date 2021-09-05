@@ -19,12 +19,10 @@ add_action( 'woocommerce_after_single_product_summary', function() {
 	global $product;
 	$cspw_settings_custom_product = get_option( 'cspw_settings_custom_product' );
 
-	$tab_description = $cspw_settings_custom_product['tab_description'];
-	$tab_aditional   = $cspw_settings_custom_product['tab_aditional'];
-	$tab_reviews     = $cspw_settings_custom_product['tab_reviews'];
-
-	$cspw_settings_custom_product = get_option( 'cspw_settings_custom_product' );
-	$custom_new_tab               = $cspw_settings_custom_product['custom_new_tab'];
+	$tab_description = $cspw_settings_custom_product['cspw_tab_description'];
+	$tab_aditional   = $cspw_settings_custom_product['cspw_tab_aditional'];
+	$tab_reviews     = $cspw_settings_custom_product['cspw_tab_reviews'];
+	$custom_new_tab  = $cspw_settings_custom_product['cspw_custom_new_tab'];
 
 	echo '<div style="display: inline-block;" class="cspw-product-custom-tabs">';
 

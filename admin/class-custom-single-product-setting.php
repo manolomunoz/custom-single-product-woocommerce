@@ -24,7 +24,6 @@ class CSPW_Settings {
 	private $cspw_settings;
 	private $cspw_settings_custom_product;
 	private $cspw_settings_custom_products;
-	private $cspw_settings_init;
 
 	/**
 	 * Construct of class
@@ -60,7 +59,6 @@ class CSPW_Settings {
 	public function create_admin_page() {
 		$this->cspw_settings_custom_product  = get_option( 'cspw_settings_custom_product' );
 		$this->cspw_settings_custom_products = get_option( 'cspw_settings_custom_products' );
-		$this->cspw_settings_init            = get_option( 'cspw_settings_init' );
 		?>
 
 		<div class="wrap">
@@ -74,21 +72,11 @@ class CSPW_Settings {
 			?>
 		    
 			<h2 class="nav-tab-wrapper">
-				<a href="?page=<?php echo $_GET['page']; ?>" class="nav-tab <?php echo $active_tab == null ? 'nav-tab-active' : ''; ?>"><?php echo esc_html__( 'Configuraciones generales', 'cspw_woocommerce' ) ?></a>
-				<a href="?page=<?php echo $_GET['page']; ?>&tab=product_custom" class="nav-tab <?php echo $active_tab == 'product_custom' ? 'nav-tab-active' : ''; ?>"><?php echo esc_html__( 'Personalizar producto individual', 'cspw_woocommerce' ) ?></a>
+				<a href="?page=<?php echo $_GET['page']; ?>" class="nav-tab <?php echo $active_tab == null ? 'nav-tab-active' : ''; ?>"><?php echo esc_html__( 'Personalizar producto individual', 'cspw_woocommerce' ) ?></a>
 				<a href="?page=<?php echo $_GET['page']; ?>&tab=products_settings" class="nav-tab <?php echo $active_tab == 'products_settings' ? 'nav-tab-active' : ''; ?>"><?php echo esc_html__( 'Productos', 'cspw_woocommerce' ) ?></a>
 			</h2>
 
 			<?php	if ( null === $active_tab ) { ?>
-				<form method="post" action="options.php">
-					<?php
-					settings_fields( 'cspw_settings_init' );
-					do_settings_sections( 'cspw-general-settings-init' );
-					submit_button();
-					?>
-				</form>
-			<?php } ?>
-			<?php	if ( 'product_custom' === $active_tab ) { ?>
 				<form method="post" action="options.php">
 					<?php
 					settings_fields( 'cspw_settings_custom_product' );
@@ -130,21 +118,6 @@ class CSPW_Settings {
 			array( $this, 'sanitize_fields' )
 		);
 
-		// Custom product Settings.
-		register_setting(
-			'cspw_settings_init',
-			'cspw_settings_init',
-			array( $this, 'sanitize_fields' )
-		);
-
-		// ***************************************************** INIT CONFIGURATIONS *****************************************************
-		add_settings_section(
-			'cspw_setting_init_section',
-			__( 'Configuraciones básicas', 'cspw_woocommerce' ),
-			array( $this, 'cspw_section_init' ),
-			'cspw-general-settings-init'
-		);
-
 		// ***************************************************** PRODUCTO INDIVIDUAL *****************************************************
 		add_settings_section(
 			'cspw_setting_section',
@@ -164,30 +137,30 @@ class CSPW_Settings {
 			'cspw-settings-product-custom'
 		);
 		add_settings_field(
-			'title',
+			'cspw_title',
 			__( 'No mostrar el nombre del producto', 'cspw_woocommerce' ),
-			array( $this, 'title_callback' ),
+			array( $this, 'cspw_title_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_basic'
 		);
 		add_settings_field(
-			'sku',
+			'cspw_sku',
 			__( 'No mostrar SKU del producto', 'cspw_woocommerce' ),
-			array( $this, 'sku_callback' ),
+			array( $this, 'cspw_sku_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_basic'
 		);
 		add_settings_field(
-			'categories',
+			'cspw_categories',
 			__( 'No mostrar categorías del producto', 'cspw_woocommerce' ),
-			array( $this, 'categories_callback' ),
+			array( $this, 'cspw_categories_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_basic'
 		);
 		add_settings_field(
-			'excerpt',
+			'cspw_excerpt',
 			__( 'No mostrar descripción del producto', 'cspw_woocommerce' ),
-			array( $this, 'excerpt_callback' ),
+			array( $this, 'cspw_excerpt_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_basic'
 		);
@@ -200,37 +173,37 @@ class CSPW_Settings {
 			'cspw-settings-product-custom'
 		);
 		add_settings_field(
-			'add_cart_button',
+			'cspw_add_cart_button',
 			__( 'No mostrar botón de añadir al carrito del producto', 'cspw_woocommerce' ),
-			array( $this, 'add_cart_button_callback' ),
+			array( $this, 'cspw_add_cart_button_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_button'
 		);
 		add_settings_field(
-			'custom_logo_add_cart_button',
+			'cspw_custom_logo_add_cart_button',
 			__( 'Añadir logo al botón añadir al carrito', 'cspw_woocommerce' ),
-			array( $this, 'custom_logo_add_cart_button_callback' ),
+			array( $this, 'cspw_custom_logo_add_cart_button_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_button'
 		);
 		add_settings_field(
-			'custom_text_add_cart_button',
+			'cspw_custom_text_add_cart_button',
 			__( 'Cambiar texto del botón', 'cspw_woocommerce' ),
-			array( $this, 'custom_text_add_cart_button_callback' ),
+			array( $this, 'cspw_custom_text_add_cart_button_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_button'
 		);
 		add_settings_field(
-			'custom_text_before_add_cart_button',
+			'cspw_custom_text_before_add_cart_button',
 			__( 'Añadir texto antes del botón', 'cspw_woocommerce' ),
-			array( $this, 'custom_text_before_add_cart_button_callback' ),
+			array( $this, 'cspw_custom_text_before_add_cart_button_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_button'
 		);
 		add_settings_field(
-			'custom_text_after_add_cart_button',
+			'cspw_custom_text_after_add_cart_button',
 			__( 'Añadir texto después del botón', 'cspw_woocommerce' ),
-			array( $this, 'custom_text_after_add_cart_button_callback' ),
+			array( $this, 'cspw_custom_text_after_add_cart_button_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_button'
 		);
@@ -243,23 +216,23 @@ class CSPW_Settings {
 			'cspw-settings-product-custom'
 		);
 		add_settings_field(
-			'price',
+			'cspw_price',
 			__( 'No mostrar precio del producto', 'cspw_woocommerce' ),
-			array( $this, 'price_callback' ),
+			array( $this, 'cspw_price_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_price'
 		);
 		add_settings_field(
-			'custom_price_before',
+			'cspw_custom_price_before',
 			__( 'Añadir texto antes del precio', 'cspw_woocommerce' ),
-			array( $this, 'custom_price_before_callback' ),
+			array( $this, 'cspw_custom_price_before_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_price'
 		);
 		add_settings_field(
-			'custom_price_after',
+			'cspw_custom_price_after',
 			__( 'Añadir texto después del precio', 'cspw_woocommerce' ),
-			array( $this, 'custom_price_after_callback' ),
+			array( $this, 'cspw_custom_price_after_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_price'
 		);
@@ -272,16 +245,16 @@ class CSPW_Settings {
 			'cspw-settings-product-custom'
 		);
 		add_settings_field(
-			'image',
+			'cspw_image',
 			__( 'No mostrar las imágenes del producto', 'cspw_woocommerce' ),
-			array( $this, 'image_callback' ),
+			array( $this, 'cspw_image_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_image'
 		);
 		add_settings_field(
-			'custom_image_zoom',
+			'cspw_custom_image_zoom',
 			__( 'Quitar zoom de la imagen del producto', 'cspw_woocommerce' ),
-			array( $this, 'custom_image_zoom_callback' ),
+			array( $this, 'cspw_custom_image_zoom_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_image'
 		);
@@ -294,44 +267,44 @@ class CSPW_Settings {
 			'cspw-settings-product-custom'
 		);
 		add_settings_field(
-			'tab_description',
+			'cspw_tab_description',
 			__( 'Descripción', 'cspw_woocommerce' ),
-			array( $this, 'tab_description_callback' ),
+			array( $this, 'cspw_tab_description_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_tabs'
 		);
 		add_settings_field(
-			'tab_aditional',
+			'cspw_tab_aditional',
 			__( 'Información adicional', 'cspw_woocommerce' ),
-			array( $this, 'tab_aditional_callback' ),
+			array( $this, 'cspw_tab_aditional_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_tabs'
 		);
 		add_settings_field(
-			'tab_reviews',
+			'cspw_tab_reviews',
 			__( 'Valoraciones', 'cspw_woocommerce' ),
-			array( $this, 'tab_reviews_callback' ),
+			array( $this, 'cspw_tab_reviews_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_tabs'
 		);
 		add_settings_field(
-			'custom_show_tabs',
+			'cspw_custom_show_tabs',
 			__( 'Modo de visualización de las tablas', 'cspw_woocommerce' ),
-			array( $this, 'custom_show_tabs_callback' ),
+			array( $this, 'cspw_custom_show_tabs_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_tabs'
 		);
 		add_settings_field(
-			'custom_new_tab',
+			'cspw_custom_new_tab',
 			__( 'Añadir nueva tabla (nombre)', 'cspw_woocommerce' ),
-			array( $this, 'custom_new_tab_callback' ),
+			array( $this, 'cspw_custom_new_tab_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_tabs'
 		);
 		add_settings_field(
-			'custom_new_tab_content',
+			'cspw_custom_new_tab_content',
 			__( 'Añadir contenido a la nueva tabla', 'cspw_woocommerce' ),
-			array( $this, 'custom_new_tab_content_callback' ),
+			array( $this, 'cspw_custom_new_tab_content_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_custom_tabs'
 		);
@@ -344,16 +317,16 @@ class CSPW_Settings {
 			'cspw-settings-product-custom'
 		);
 		add_settings_field(
-			'related_product',
+			'cspw_related_product',
 			__( 'No mostrar los productos relacionados', 'cspw_woocommerce' ),
-			array( $this, 'related_product_callback' ),
+			array( $this, 'cspw_related_product_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_related_product'
 		);
 		add_settings_field(
-			'custom_show_related_product_button',
+			'cspw_custom_show_related_product_button',
 			__( 'Quitar "Añadir al carrito" de los productos relacionados', 'cspw_woocommerce' ),
-			array( $this, 'custom_show_related_product_button_callback' ),
+			array( $this, 'cspw_custom_show_related_product_button_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_related_product'
 		);
@@ -366,9 +339,9 @@ class CSPW_Settings {
 			'cspw-settings-product-custom'
 		);
 		add_settings_field(
-			'custom_show_product_custom_comment',
+			'cspw_custom_show_product_custom_comment',
 			__( 'Modo de visualización de los comentarios', 'cspw_woocommerce' ),
-			array( $this, 'custom_show_product_custom_comment_callback' ),
+			array( $this, 'cspw_custom_show_product_custom_comment_callback' ),
 			'cspw-settings-product-custom',
 			'cspw_setting_section_product_comments'
 		);
@@ -381,44 +354,44 @@ class CSPW_Settings {
 			'cspw-settings-products'
 		);
 		add_settings_field(
-			'results',
+			'cspw_results',
 			__( 'No mostrar el número de productos', 'cspw_woocommerce' ),
-			array( $this, 'results_callback' ),
+			array( $this, 'cspw_results_callback' ),
 			'cspw-settings-products',
 			'cspw_setting_section_products'
 		);
 		add_settings_field(
-			'order',
+			'cspw_order',
 			__( 'No mostrar desplegable de orden de los productos', 'cspw_woocommerce' ),
-			array( $this, 'order_callback' ),
+			array( $this, 'cspw_order_callback' ),
 			'cspw-settings-products',
 			'cspw_setting_section_products'
 		);
 		add_settings_field(
-			'loop_title',
+			'cspw_loop_title',
 			__( 'No mostrar el título de productos', 'cspw_woocommerce' ),
-			array( $this, 'loop_title_callback' ),
+			array( $this, 'cspw_loop_title_callback' ),
 			'cspw-settings-products',
 			'cspw_setting_section_products'
 		);
 		add_settings_field(
-			'loop_image',
+			'cspw_loop_image',
 			__( 'No mostrar la imagen de los productos', 'cspw_woocommerce' ),
-			array( $this, 'loop_image_callback' ),
+			array( $this, 'cspw_loop_image_callback' ),
 			'cspw-settings-products',
 			'cspw_setting_section_products'
 		);
 		add_settings_field(
-			'loop_price',
+			'cspw_loop_price',
 			__( 'No mostrar el precio de los productos', 'cspw_woocommerce' ),
-			array( $this, 'loop_price_callback' ),
+			array( $this, 'cspw_loop_price_callback' ),
 			'cspw-settings-products',
 			'cspw_setting_section_products'
 		);
 		add_settings_field(
-			'loop_add_cart_button',
+			'cspw_loop_add_cart_button',
 			__( 'No mostrar botón añadir al carrito de los productos', 'cspw_woocommerce' ),
-			array( $this, 'loop_add_cart_button_callback' ),
+			array( $this, 'cspw_loop_add_cart_button_callback' ),
 			'cspw-settings-products',
 			'cspw_setting_section_products'
 		);
@@ -431,30 +404,30 @@ class CSPW_Settings {
 			'cspw-settings-products'
 		);
 		add_settings_field(
-			'custom_products_logo_add_cart_button',
+			'cspw_custom_products_logo_add_cart_button',
 			__( 'Añadir logo al botón añadir al carrito', 'cspw_woocommerce' ),
-			array( $this, 'custom_products_logo_add_cart_button_callback' ),
+			array( $this, 'cspw_custom_products_logo_add_cart_button_callback' ),
 			'cspw-settings-products',
 			'cspw_setting_section_products_button'
 		);
 		add_settings_field(
-			'custom_products_button_text',
+			'cspw_custom_products_button_text',
 			__( 'Cambiar texto del botón', 'cspw_woocommerce' ),
-			array( $this, 'custom_products_button_text_callback' ),
+			array( $this, 'cspw_custom_products_button_text_callback' ),
 			'cspw-settings-products',
 			'cspw_setting_section_products_button'
 		);
 		add_settings_field(
-			'custom_products_button_before',
+			'cspw_custom_products_button_before',
 			__( 'Añadir texto antes del botón', 'cspw_woocommerce' ),
-			array( $this, 'custom_products_button_before_callback' ),
+			array( $this, 'cspw_custom_products_button_before_callback' ),
 			'cspw-settings-products',
 			'cspw_setting_section_products_button'
 		);
 		add_settings_field(
-			'custom_products_button_after',
+			'cspw_custom_products_button_after',
 			__( 'Añadir texto después del botón', 'cspw_woocommerce' ),
-			array( $this, 'custom_products_button_after_callback' ),
+			array( $this, 'cspw_custom_products_button_after_callback' ),
 			'cspw-settings-products',
 			'cspw_setting_section_products_button'
 		);
@@ -473,63 +446,54 @@ class CSPW_Settings {
 		$settings_keys = array(
 			// INIT CONFIGURATIONS
 			// PRODUCTO INDIVIDUAL
-			'title',
-			'sku',
-			'categories',
-			'excerpt',
-			'price',
-			'image',
-			'add_cart_button',
-			'tab_description',
-			'tab_aditional',
-			'tab_reviews',
-			'related_product',
-			'custom_logo_add_cart_button',
-			'custom_text_add_cart_button',
-			'custom_text_before_add_cart_button',
-			'custom_text_after_add_cart_button',
-			'custom_price_before',
-			'custom_price_after',
-			'custom_image_zoom',
-			'custom_show_tabs',
-			'custom_new_tab',
-			'custom_new_tab_content',
-			'custom_show_related_product_button',
-			'custom_show_product_custom_comment',
+			'cspw_title',
+			'cspw_sku',
+			'cspw_categories',
+			'cspw_excerpt',
+			'cspw_price',
+			'cspw_image',
+			'cspw_add_cart_button',
+			'cspw_tab_description',
+			'cspw_tab_aditional',
+			'cspw_tab_reviews',
+			'cspw_related_product',
+			'cspw_custom_logo_add_cart_button',
+			'cspw_custom_text_add_cart_button',
+			'cspw_custom_text_before_add_cart_button',
+			'cspw_custom_text_after_add_cart_button',
+			'cspw_custom_price_before',
+			'cspw_custom_price_after',
+			'cspw_custom_image_zoom',
+			'cspw_custom_show_tabs',
+			'cspw_custom_new_tab',
+			'cspw_custom_new_tab_content',
+			'cspw_custom_show_related_product_button',
+			'cspw_custom_show_product_custom_comment',
 			// PRODUCTOS
-			'results',
-			'order',
-			'loop_title',
-			'loop_price',
-			'loop_image',
-			'loop_add_cart_button',
-			'custom_products_logo_add_cart_button',
-			'custom_products_button_text',
-			'custom_products_button_before',
-			'custom_products_button_after',
+			'cspw_results',
+			'cspw_order',
+			'cspw_loop_title',
+			'cspw_loop_price',
+			'cspw_loop_image',
+			'cspw_loop_add_cart_button',
+			'cspw_custom_products_logo_add_cart_button',
+			'cspw_custom_products_button_text',
+			'cspw_custom_products_button_before',
+			'cspw_custom_products_button_after',
 		);
 
 		foreach ( $settings_keys as $key ) {
 			if ( isset( $input[ $key ] ) ) {
-				$sanitary_values[ $key ] = sanitize_text_field( $input[ $key ] );
+				if ( $key == 'cspw_custom_new_tab_content' ) {
+					$sanitary_values[ $key ] = wp_kses_post( $input[ $key ] );
+				} else {
+					$sanitary_values[ $key ] = sanitize_text_field( $input[ $key ] );
+				}
 			}
 		}
 
 		return $sanitary_values;
 	}
-
-
-	/****************** INIT CONFIGURATIONS ******************/
-
-	/**
-	 * Info for holded automate section.
-	 *
-	 * @return void
-	 */
-	public function cspw_section_init() {
-		esc_html_e( 'Configuraciones generales para una mejor venta de productos.', 'cspw_woocommerce' );
-	}
-
 
 	/****************** PRODUCTO INDIVIDUAL ******************/
 
@@ -543,80 +507,80 @@ class CSPW_Settings {
 	}
 
 	/**
-	 * Call back for sku
+	 * Call back for cspw_sku
 	 *
 	 * @return void
 	 */
-	public function sku_callback() {
+	public function cspw_sku_callback() {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input type="checkbox" id="cspw_sku" name="cspw_settings_custom_product[sku]" value="1"' . checked( 1, $settings['sku'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_sku" name="cspw_settings_custom_product[cspw_sku]" value="1"' . checked( 1, $settings['cspw_sku'], false ) . '/>';
 	}
 
 	/**
-	 * Call back for title
+	 * Call back for cspw_title
 	 *
 	 * @return void
 	 */
-	public function title_callback() {
+	public function cspw_title_callback() {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input type="checkbox" id="cspw_title" name="cspw_settings_custom_product[title]" value="1"' . checked( 1, $settings['title'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_title" name="cspw_settings_custom_product[cspw_title]" value="1"' . checked( 1, $settings['cspw_title'], false ) . '/>';
 	}
 
 	/**
-	 * Call back for categories
+	 * Call back for cspw_categories
 	 *
 	 * @return void
 	 */
-	public function categories_callback() {
+	public function cspw_categories_callback() {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input type="checkbox" id="cspw_categories" name="cspw_settings_custom_product[categories]" value="1"' . checked( 1, $settings['categories'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_categories" name="cspw_settings_custom_product[cspw_categories]" value="1"' . checked( 1, $settings['cspw_categories'], false ) . '/>';
 	}
 
 	/**
-	 * Call back for excerpt
+	 * Call back for cspw_excerpt
 	 *
 	 * @return void
 	 */
-	public function excerpt_callback() {
+	public function cspw_excerpt_callback() {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input type="checkbox" id="cspw_excerpt" name="cspw_settings_custom_product[excerpt]" value="1"' . checked( 1, $settings['excerpt'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_excerpt" name="cspw_settings_custom_product[cspw_excerpt]" value="1"' . checked( 1, $settings['cspw_excerpt'], false ) . '/>';
 	}
 
 	/**
-	 * Call back for price
+	 * Call back for cspw_price
 	 *
 	 * @return void
 	 */
-	public function price_callback() {
+	public function cspw_price_callback() {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input type="checkbox" id="cspw_price" name="cspw_settings_custom_product[price]" value="1"' . checked( 1, $settings['price'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_price" name="cspw_settings_custom_product[cspw_price]" value="1"' . checked( 1, $settings['cspw_price'], false ) . '/>';
 	}
 
 	/**
-	 * Call back for image
+	 * Call back for cspw_image
 	 *
 	 * @return void
 	 */
-	public function image_callback() {
+	public function cspw_image_callback() {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input type="checkbox" id="cspw_image" name="cspw_settings_custom_product[image]" value="1"' . checked( 1, $settings['image'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_image" name="cspw_settings_custom_product[cspw_image]" value="1"' . checked( 1, $settings['cspw_image'], false ) . '/>';
 	}
 	
 	/**
-	 * Call back for add_cart_button
+	 * Call back for cspw_add_cart_button
 	 *
 	 * @return void
 	 */
-	public function add_cart_button_callback() {
+	public function cspw_add_cart_button_callback() {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input type="checkbox" id="cspw_add_cart_button" name="cspw_settings_custom_product[add_cart_button]" value="1"' . checked( 1, $settings['add_cart_button'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_add_cart_button" name="cspw_settings_custom_product[cspw_add_cart_button]" value="1"' . checked( 1, $settings['cspw_add_cart_button'], false ) . '/>';
 	}
 
 	/**
@@ -629,47 +593,47 @@ class CSPW_Settings {
 	}
 
 	/**
-	 * Call back for tab description
+	 * Call back for cspw_tab_description
 	 *
 	 * @return void
 	 */
-	public function tab_description_callback() {
+	public function cspw_tab_description_callback() {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input type="checkbox" id="cspw_tab_description" name="cspw_settings_custom_product[tab_description]" value="1"' . checked( 1, $settings['tab_description'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_tab_description" name="cspw_settings_custom_product[cspw_tab_description]" value="1"' . checked( 1, $settings['cspw_tab_description'], false ) . '/>';
 	}
 
 	/**
-	 * Call back for tab aditional
+	 * Call back for cspw_tab_aditional
 	 *
 	 * @return void
 	 */
-	public function tab_aditional_callback() {
+	public function cspw_tab_aditional_callback() {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input type="checkbox" id="cspw_tab_aditional" name="cspw_settings_custom_product[tab_aditional]" value="1"' . checked( 1, $settings['tab_aditional'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_tab_aditional" name="cspw_settings_custom_product[cspw_tab_aditional]" value="1"' . checked( 1, $settings['cspw_tab_aditional'], false ) . '/>';
 	}
 
 	/**
-	 * Call back for tab reviews
+	 * Call back for cspw_tab_reviews
 	 *
 	 * @return void
 	 */
-	public function tab_reviews_callback() {
+	public function cspw_tab_reviews_callback() {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input type="checkbox" id="cspw_tab_reviews" name="cspw_settings_custom_product[tab_reviews]" value="1"' . checked( 1, $settings['tab_reviews'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_tab_reviews" name="cspw_settings_custom_product[cspw_tab_reviews]" value="1"' . checked( 1, $settings['cspw_tab_reviews'], false ) . '/>';
 	}
 
 	/**
-	 * Call back for tab related_product
+	 * Call back for tab cspw_related_product
 	 *
 	 * @return void
 	 */
-	public function related_product_callback() {
+	public function cspw_related_product_callback() {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input type="checkbox" id="cspw_related_product" name="cspw_settings_custom_product[related_product]" value="1"' . checked( 1, $settings['related_product'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_related_product" name="cspw_settings_custom_product[cspw_related_product]" value="1"' . checked( 1, $settings['cspw_related_product'], false ) . '/>';
 	}
 
 	/****************** PRODUCTOS ******************/
@@ -684,69 +648,69 @@ class CSPW_Settings {
 	}
 
 	/**
-	 * Call back for results
+	 * Call back for cspw_results
 	 *
 	 * @return void
 	 */
-	public function results_callback() {
+	public function cspw_results_callback() {
 		$settings = get_option( 'cspw_settings_custom_products' );
 		
-		echo '<input type="checkbox" id="cspw_results" name="cspw_settings_custom_products[results]" value="1"' . checked( 1, $settings['results'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_results" name="cspw_settings_custom_products[cspw_results]" value="1"' . checked( 1, $settings['cspw_results'], false ) . '/>';
 	}
 
 	/**
-	 * Call back for order
+	 * Call back for cspw_order
 	 *
 	 * @return void
 	 */
-	public function order_callback() {
+	public function cspw_order_callback() {
 		$settings = get_option( 'cspw_settings_custom_products' );
 		
-		echo '<input type="checkbox" id="cspw_order" name="cspw_settings_custom_products[order]" value="1"' . checked( 1, $settings['order'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_order" name="cspw_settings_custom_products[cspw_order]" value="1"' . checked( 1, $settings['cspw_order'], false ) . '/>';
 	}
 	
 	/**
-	 * Call back for loop_title
+	 * Call back for cspw_loop_title
 	 *
 	 * @return void
 	 */
-	public function loop_title_callback() {
+	public function cspw_loop_title_callback() {
 		$settings = get_option( 'cspw_settings_custom_products' );
 		
-		echo '<input type="checkbox" id="cspw_loop_title" name="cspw_settings_custom_products[loop_title]" value="1"' . checked( 1, $settings['loop_title'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_loop_title" name="cspw_settings_custom_products[cspw_loop_title]" value="1"' . checked( 1, $settings['cspw_loop_title'], false ) . '/>';
 	}
 
 	/**
-	 * Call back for loop_price
+	 * Call back for cspw_loop_price
 	 *
 	 * @return void
 	 */
-	public function loop_price_callback() {
+	public function cspw_loop_price_callback() {
 		$settings = get_option( 'cspw_settings_custom_products' );
 		
-		echo '<input type="checkbox" id="cspw_loop_price" name="cspw_settings_custom_products[loop_price]" value="1"' . checked( 1, $settings['loop_price'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_loop_price" name="cspw_settings_custom_products[cspw_loop_price]" value="1"' . checked( 1, $settings['cspw_loop_price'], false ) . '/>';
 	}
 
 	/**
-	 * Call back for loop_image
+	 * Call back for cspw_loop_image
 	 *
 	 * @return void
 	 */
-	public function loop_image_callback() {
+	public function cspw_loop_image_callback() {
 		$settings = get_option( 'cspw_settings_custom_products' );
 		
-		echo '<input type="checkbox" id="cspw_loop_image" name="cspw_settings_custom_products[loop_image]" value="1"' . checked( 1, $settings['loop_image'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_loop_image" name="cspw_settings_custom_products[cspw_loop_image]" value="1"' . checked( 1, $settings['cspw_loop_image'], false ) . '/>';
 	}
 
 	/**
-	 * Call back for loop_add_cart_button
+	 * Call back for cspw_loop_add_cart_button
 	 *
 	 * @return void
 	 */
-	public function loop_add_cart_button_callback() {
+	public function cspw_loop_add_cart_button_callback() {
 		$settings = get_option( 'cspw_settings_custom_products' );
 		
-		echo '<input type="checkbox" id="cspw_loop_add_cart_button" name="cspw_settings_custom_products[loop_add_cart_button]" value="1"' . checked( 1, $settings['loop_add_cart_button'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_loop_add_cart_button" name="cspw_settings_custom_products[cspw_loop_add_cart_button]" value="1"' . checked( 1, $settings['cspw_loop_add_cart_button'], false ) . '/>';
 	}
 
 	/**
@@ -759,16 +723,16 @@ class CSPW_Settings {
 	}
 
 	/**
-	 * Call back for custom_products_logo_add_cart_button
+	 * Call back for cspw_custom_products_logo_add_cart_button
 	 *
 	 * @return void
 	 */
-	public function custom_products_logo_add_cart_button_callback() {
+	public function cspw_custom_products_logo_add_cart_button_callback() {
 		$settings = get_option( 'cspw_settings_custom_products' );
 		?>
 		<label for="upload_image">
-			<input id="custom_products_logo_add_cart_button" type="text" size="36" name="cspw_settings_custom_products[custom_products_logo_add_cart_button]" value="<?php echo esc_attr__( $settings['custom_products_logo_add_cart_button'], 'cspw_woocommerce' );  ?>" />
-			<input id="upload_image_button_products" class="button" type="button" value="Seleccionar imagen" />
+			<input id="cspw_custom_products_logo_add_cart_button" type="text" size="36" name="cspw_settings_custom_products[cspw_custom_products_logo_add_cart_button]" value="<?php echo esc_attr__( $settings['cspw_custom_products_logo_add_cart_button'], 'cspw_woocommerce' );  ?>" />
+			<input id="cspw_upload_image_button_products" class="button" type="button" value="Seleccionar imagen" />
 			<br /><?php esc_html_e( 'Ingresa una URL o añade una imagen', 'cspw_woocommerce' ) ?>
 		</label>
 		<?php
@@ -778,36 +742,36 @@ class CSPW_Settings {
 	}
 
 	/**
-	 * Call back for custom_products_button_text
+	 * Call back for cspw_custom_products_button_text
 	 *
 	 * @return void
 	 */
-	public function custom_products_button_text_callback() {
+	public function cspw_custom_products_button_text_callback() {
 		$settings = get_option( 'cspw_settings_custom_products' );
 		
-		echo '<input id="custom_products_button_text" name="cspw_settings_custom_products[custom_products_button_text]" size="40" type="text" value="' . esc_attr__( $settings['custom_products_button_text'], 'cspw_woocommerce' ) . '" />';
+		echo '<input id="cspw_custom_products_button_text" name="cspw_settings_custom_products[cspw_custom_products_button_text]" size="40" type="text" value="' . esc_attr__( $settings['cspw_custom_products_button_text'], 'cspw_woocommerce' ) . '" />';
 	}
 
 	/**
-	 * Call back for custom_products_button_before
+	 * Call back for cspw_custom_products_button_before
 	 *
 	 * @return void
 	 */
-	public function custom_products_button_before_callback() {
+	public function cspw_custom_products_button_before_callback() {
 		$settings = get_option( 'cspw_settings_custom_products' );
 		
-		echo '<input id="custom_products_button_before" name="cspw_settings_custom_products[custom_products_button_before]" size="40" type="text" value="' . esc_attr__( $settings['custom_products_button_before'], 'cspw_woocommerce' ) . '" />';
+		echo '<input id="cspw_custom_products_button_before" name="cspw_settings_custom_products[cspw_custom_products_button_before]" size="40" type="text" value="' . esc_attr__( $settings['cspw_custom_products_button_before'], 'cspw_woocommerce' ) . '" />';
 	}
 
 	/**
-	 * Call back for custom_products_button_after
+	 * Call back for cspw_custom_products_button_after
 	 *
 	 * @return void
 	 */
-	public function custom_products_button_after_callback() {
+	public function cspw_custom_products_button_after_callback() {
 		$settings = get_option( 'cspw_settings_custom_products' );
 		
-		echo '<input id="custom_products_button_after" name="cspw_settings_custom_products[custom_products_button_after]" size="40" type="text" value="' . esc_attr__( $settings['custom_products_button_after'], 'cspw_woocommerce' ) . '" />';
+		echo '<input id="cspw_custom_products_button_after" name="cspw_settings_custom_products[cspw_custom_products_button_after]" size="40" type="text" value="' . esc_attr__( $settings['cspw_custom_products_button_after'], 'cspw_woocommerce' ) . '" />';
 	}
 
 	/****************** PRODUCTO INDIVIDUAL PERSONALIZACIÓN ******************/
@@ -821,16 +785,16 @@ class CSPW_Settings {
 	}
 
 	/**
-	 * Call back for custom_logo_add_cart_button
+	 * Call back for cspw_custom_logo_add_cart_button
 	 *
 	 * @return void
 	 */
-	public function custom_logo_add_cart_button_callback() {
+	public function cspw_custom_logo_add_cart_button_callback() {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		?>
 		<label for="upload_image">
-			<input id="custom_logo_add_cart_button" type="text" size="36" name="cspw_settings_custom_product[custom_logo_add_cart_button]" value="<?php echo esc_attr__( $settings['custom_logo_add_cart_button'], 'cspw_woocommerce' );  ?>" />
-			<input id="upload_image_button" class="button" type="button" value="Seleccionar imagen" />
+			<input id="cspw_custom_logo_add_cart_button" type="text" size="36" name="cspw_settings_custom_product[cspw_custom_logo_add_cart_button]" value="<?php echo esc_attr__( $settings['cspw_custom_logo_add_cart_button'], 'cspw_woocommerce' );  ?>" />
+			<input id="cspw_upload_image_button" class="button" type="button" value="Seleccionar imagen" />
 			<br /><?php esc_html_e( 'Ingresa una URL o añade una imagen', 'cspw_woocommerce' ) ?>
 		</label>
 		<?php
@@ -840,36 +804,36 @@ class CSPW_Settings {
 	}
 
 	/**
-	 * Call back for custom_text_add_cart_button
+	 * Call back for cspw_custom_text_add_cart_button
 	 *
 	 * @return void
 	 */
-	public function custom_text_add_cart_button_callback() {
+	public function cspw_custom_text_add_cart_button_callback() {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input id="custom_text_add_cart_button" name="cspw_settings_custom_product[custom_text_add_cart_button]" size="40" type="text" value="' . esc_attr__( $settings['custom_text_add_cart_button'], 'cspw_woocommerce' ) . '" />';
+		echo '<input id="cspw_custom_text_add_cart_button" name="cspw_settings_custom_product[cspw_custom_text_add_cart_button]" size="40" type="text" value="' . esc_attr__( $settings['cspw_custom_text_add_cart_button'], 'cspw_woocommerce' ) . '" />';
 	}
 	
 	/**
-	 * Call back for custom_text_before_add_cart_button
+	 * Call back for cspw_custom_text_before_add_cart_button
 	 *
 	 * @return void
 	 */
-	public function custom_text_before_add_cart_button_callback() {
+	public function cspw_custom_text_before_add_cart_button_callback() {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input id="custom_text_before_add_cart_button" name="cspw_settings_custom_product[custom_text_before_add_cart_button]" size="40" type="text" value="' . esc_attr__( $settings['custom_text_before_add_cart_button'], 'cspw_woocommerce' ) . '" />';
+		echo '<input id="cspw_custom_text_before_add_cart_button" name="cspw_settings_custom_product[cspw_custom_text_before_add_cart_button]" size="40" type="text" value="' . esc_attr__( $settings['cspw_custom_text_before_add_cart_button'], 'cspw_woocommerce' ) . '" />';
 	}
 	
 	/**
-	 * Call back for custom_text_after_add_cart_button
+	 * Call back for cspw_custom_text_after_add_cart_button
 	 *
 	 * @return void
 	 */
-	public function custom_text_after_add_cart_button_callback() {
+	public function cspw_custom_text_after_add_cart_button_callback() {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input id="custom_text_after_add_cart_button" name="cspw_settings_custom_product[custom_text_after_add_cart_button]" size="40" type="text" value="' . esc_attr__( $settings['custom_text_after_add_cart_button'], 'cspw_woocommerce' ) . '" />';
+		echo '<input id="cspw_custom_text_after_add_cart_button" name="cspw_settings_custom_product[cspw_custom_text_after_add_cart_button]" size="40" type="text" value="' . esc_attr__( $settings['cspw_custom_text_after_add_cart_button'], 'cspw_woocommerce' ) . '" />';
 	}
 
 	/**
@@ -891,25 +855,25 @@ class CSPW_Settings {
 	}
 
 	/**
-	 * Call back for custom_price_before
+	 * Call back for cspw_custom_price_before
 	 *
 	 * @return void
 	 */
-	public function custom_price_before_callback() {
+	public function cspw_custom_price_before_callback() {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input id="custom_price_before" name="cspw_settings_custom_product[custom_price_before]" size="40" type="text" value="' . esc_attr__( $settings['custom_price_before'], 'cspw_woocommerce' ) . '" />';
+		echo '<input id="cspw_custom_price_before" name="cspw_settings_custom_product[cspw_custom_price_before]" size="40" type="text" value="' . esc_attr__( $settings['cspw_custom_price_before'], 'cspw_woocommerce' ) . '" />';
 	}
 
 	/**
-	 * Call back for custom_price_after
+	 * Call back for cspw_custom_price_after
 	 *
 	 * @return void
 	 */
-	public function custom_price_after_callback() {
+	public function cspw_custom_price_after_callback() {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input id="custom_price_after" name="cspw_settings_custom_product[custom_price_after]" size="40" type="text" value="' . esc_attr__( $settings['custom_price_after'], 'cspw_woocommerce' ) . '" />';
+		echo '<input id="cspw_custom_price_after" name="cspw_settings_custom_product[cspw_custom_price_after]" size="40" type="text" value="' . esc_attr__( $settings['cspw_custom_price_after'], 'cspw_woocommerce' ) . '" />';
 	}
 
 	/**
@@ -922,14 +886,14 @@ class CSPW_Settings {
 	}
 
 	/**
-	 * Call back for custom_image_zoom
+	 * Call back for cspw_custom_image_zoom
 	 *
 	 * @return void
 	 */
-	public function custom_image_zoom_callback() {
+	public function cspw_custom_image_zoom_callback() {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input type="checkbox" id="cspw_custom_image_zoom" name="cspw_settings_custom_product[custom_image_zoom]" value="1"' . checked( 1, $settings['custom_image_zoom'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_cspw_custom_image_zoom" name="cspw_settings_custom_product[cspw_custom_image_zoom]" value="1"' . checked( 1, $settings['cspw_custom_image_zoom'], false ) . '/>';
 	}
 
 	/**
@@ -942,15 +906,15 @@ class CSPW_Settings {
 	}
 
 	/**
-	 * Call back for custom_show_tabs
+	 * Call back for cspw_custom_show_tabs
 	 *
 	 * @return void
 	 */
-	public function custom_show_tabs_callback() {
+	public function cspw_custom_show_tabs_callback() {
 		$settings  = get_option( 'cspw_settings_custom_product' );
-		$show_tabs = $settings['custom_show_tabs'];
+		$show_tabs = $settings['cspw_custom_show_tabs'];
 
-		echo '<select id="cspw_custom_show_tabs" name="cspw_settings_custom_product[custom_show_tabs]">';
+		echo '<select id="cspw_custom_show_tabs" name="cspw_settings_custom_product[cspw_custom_show_tabs]">';
 
 		echo '<option value="pestanas" ' . selected( $show_tabs, "pestanas" ) . '>' . __( 'Pestañas', 'cspw_woocommerce' ) . '</option>';
 		echo '<option value="lista" ' . selected( $show_tabs, "lista" ) . '>' . __( 'Lista', 'cspw_woocommerce' ) . '</option>';
@@ -959,26 +923,34 @@ class CSPW_Settings {
 	}
 	
 	/**
-	 * Call back for custom_new_tab
+	 * Call back for cspw_custom_new_tab
 	 *
 	 * @return void
 	 */
-	public function custom_new_tab_callback( $args ) {
+	public function cspw_custom_new_tab_callback( $args ) {
 		$settings  = get_option( 'cspw_settings_custom_product' );
 
-		echo '<input type="text" id="custom_new_tab" name="cspw_settings_custom_product[custom_new_tab]" value="' . esc_attr__( $settings['custom_new_tab'], 'cspw_woocommerce' ) . '" />';
+		echo '<input type="text" id="cspw_custom_new_tab" name="cspw_settings_custom_product[cspw_custom_new_tab]" value="' . esc_attr__( $settings['cspw_custom_new_tab'], 'cspw_woocommerce' ) . '" />';
 		
 	}
 
 	/**
-	 * Call back for custom_new_tab_content
+	 * Call back for cspw_custom_new_tab_content
 	 *
 	 * @return void
 	 */
-	public function custom_new_tab_content_callback( $args ) {
+	public function cspw_custom_new_tab_content_callback( $args ) {
 		$settings  = get_option( 'cspw_settings_custom_product' );
 
-		echo '<textarea id="custom_new_tab_content" name="cspw_settings_custom_product[custom_new_tab_content]" rows="10" cols="50" >' . esc_attr__( $settings['custom_new_tab_content'], 'cspw_woocommerce' ) . '</textarea>';
+		$content = isset( $settings['cspw_custom_new_tab_content'] ) ?  $settings['cspw_custom_new_tab_content'] : false;
+		$args = array(
+			'textarea_name' => 'cspw_settings_custom_product[cspw_custom_new_tab_content]',
+			'wpautop'       => true,
+			'tinymce'       => array(
+			    'toolbar1'      => 'bold,italic,underline,separator,alignleft,aligncenter,alignright,separator,link,unlink,undo,redo',
+			),
+		);
+		wp_editor( $content, 'cspw_custom_new_tab_content', $args );
 		
 	}
 
@@ -992,14 +964,14 @@ class CSPW_Settings {
 	}
 
 	/**
-	 * Call back for custom_show_related_product_button
+	 * Call back for cspw_custom_show_related_product_button
 	 *
 	 * @return void
 	 */
-	public function custom_show_related_product_button_callback() {
+	public function cspw_custom_show_related_product_button_callback() {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input type="checkbox" id="cspw_custom_show_related_product_button" name="cspw_settings_custom_product[custom_show_related_product_button]" value="1"' . checked( 1, $settings['custom_show_related_product_button'], false ) . '/>';
+		echo '<input type="checkbox" id="cspw_custom_show_related_product_button" name="cspw_settings_custom_product[cspw_custom_show_related_product_button]" value="1"' . checked( 1, $settings['cspw_custom_show_related_product_button'], false ) . '/>';
 	}
 
 	/**
@@ -1012,18 +984,18 @@ class CSPW_Settings {
 	}
 
 	/**
-	 * Call back for custom_show_product_custom_comment
+	 * Call back for cspw_custom_show_product_custom_comment
 	 *
 	 * @return void
 	 */
-	public function custom_show_product_custom_comment_callback() {
+	public function cspw_custom_show_product_custom_comment_callback() {
 		$settings = get_option( 'cspw_settings_custom_product' );
 		
-		echo '<input type="radio" name="cspw_settings_custom_product[custom_show_product_custom_comment]" value="1" ' . checked( 1, $settings['custom_show_product_custom_comment'], false ) . ' />Por defecto';
+		echo '<input type="radio" name="cspw_settings_custom_product[cspw_custom_show_product_custom_comment]" value="1" ' . checked( 1, $settings['cspw_custom_show_product_custom_comment'], false ) . ' />Por defecto';
 		echo '<br>';
-		echo '<input type="radio" name="cspw_settings_custom_product[custom_show_product_custom_comment]" value="2" ' . checked( 2, $settings['custom_show_product_custom_comment'], false ) . ' />Nombre abreviado, apellido largo. Ejemplo: R. Nadal';
+		echo '<input type="radio" name="cspw_settings_custom_product[cspw_custom_show_product_custom_comment]" value="2" ' . checked( 2, $settings['cspw_custom_show_product_custom_comment'], false ) . ' />Nombre abreviado, apellido largo. Ejemplo: R. Nadal';
 		echo '<br>';
-		echo '<input type="radio" name="cspw_settings_custom_product[custom_show_product_custom_comment]" value="3" ' . checked( 3, $settings['custom_show_product_custom_comment'], false ) . ' />Nombre completo, apellido abreviado. Ejemplo: Rafael N.';
+		echo '<input type="radio" name="cspw_settings_custom_product[cspw_custom_show_product_custom_comment]" value="3" ' . checked( 3, $settings['cspw_custom_show_product_custom_comment'], false ) . ' />Nombre completo, apellido abreviado. Ejemplo: Rafael N.';
 	}
 
 	/**
@@ -1035,7 +1007,7 @@ class CSPW_Settings {
 		// Free Version.
 		echo '
 			<style>
-			#custom_logo_add_cart_button {
+			#cspw_custom_logo_add_cart_button {
 				width: 350px;
 			}
 			#cspw_custom_show_tabs {

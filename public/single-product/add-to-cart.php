@@ -34,8 +34,8 @@ add_action( 'woocommerce_single_product_summary', function() {
 
 			<?php
 			do_action( 'woocommerce_before_add_to_cart_quantity' );
-			if ( isset( $cspw_settings_custom_product['custom_text_before_add_cart_button'] ) ) {
-				$before_text = '<p class="cspw-custom-text-before-add-cart-button" >' . $cspw_settings_custom_product['custom_text_before_add_cart_button'] . '</p>';
+			if ( isset( $cspw_settings_custom_product['cspw_custom_text_before_add_cart_button'] ) ) {
+				$before_text = '<p class="cspw-custom-text-before-add-cart-button" >' . $cspw_settings_custom_product['cspw_custom_text_before_add_cart_button'] . '</p>';
 				echo $before_text;
 			}
 
@@ -52,12 +52,12 @@ add_action( 'woocommerce_single_product_summary', function() {
 
 			<button type="submit" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>" class="single_add_to_cart_button button alt">
 			<?php
-			if ( $cspw_settings_custom_product['custom_logo_add_cart_button'] != '' ) {
-				$logo = '<img class="cspw-custom-logo-add-cart-button" style="width:50px;heigth=50px;" src="' . $cspw_settings_custom_product['custom_logo_add_cart_button'] . '" />';
+			if ( $cspw_settings_custom_product['cspw_custom_logo_add_cart_button'] != '' ) {
+				$logo = '<img class="cspw-custom-logo-add-cart-button" style="width:50px;heigth=50px;" src="' . $cspw_settings_custom_product['cspw_custom_logo_add_cart_button'] . '" />';
 				echo $logo;
 			}
-			if ( $cspw_settings_custom_product['custom_text_add_cart_button'] != '' ) {
-				$text = $cspw_settings_custom_product['custom_text_add_cart_button'];
+			if ( strlen( $cspw_settings_custom_product['cspw_custom_text_add_cart_button'] ) > 0 ) {
+				$text = $cspw_settings_custom_product['cspw_custom_text_add_cart_button'];
 				echo $text;
 			} else {
 				echo esc_html( $product->single_add_to_cart_text() );
@@ -68,8 +68,8 @@ add_action( 'woocommerce_single_product_summary', function() {
 
 			<?php 
 			do_action( 'woocommerce_after_add_to_cart_button' );
-			if ( isset( $cspw_settings_custom_product['custom_text_after_add_cart_button'] ) ) {
-				$after_text = '<p class="cspw-custom-text-after-add-cart-button" >' . $cspw_settings_custom_product['custom_text_after_add_cart_button'] . '</p>';
+			if ( strlen( $cspw_settings_custom_product['cspw_custom_text_after_add_cart_button'] ) > 0 ) {
+				$after_text = '<p class="cspw-custom-text-after-add-cart-button" >' . $cspw_settings_custom_product['cspw_custom_text_after_add_cart_button'] . '</p>';
 				echo $after_text;
 			}
 			?>

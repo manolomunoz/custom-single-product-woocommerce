@@ -7,7 +7,7 @@
 		var custom_uploader;
 	   
 	   
-		$('#upload_image_button').click(function(e) {
+		$('#cspw_upload_image_button').click(function(e) {
 	   
 		    e.preventDefault();
 	   
@@ -29,14 +29,14 @@
 		    //When a file is selected, grab the URL and set it as the text field's value
 		    custom_uploader.on('select', function() {
 			  attachment = custom_uploader.state().get('selection').first().toJSON();
-			  $('#custom_logo_add_cart_button').attr('value', attachment.url);
+			  $('#cspw_custom_logo_add_cart_button').attr('value', attachment.url);
 		    });
 	   
 		    //Open the uploader dialog
 		    custom_uploader.open();
 	   
 		});
-		$('#upload_image_button_products').click(function(e) {
+		$('#cspw_upload_image_button_products').click(function(e) {
 	   
 			e.preventDefault();
 	     
@@ -58,7 +58,7 @@
 			//When a file is selected, grab the URL and set it as the text field's value
 			custom_uploader.on('select', function() {
 			    attachment = custom_uploader.state().get('selection').first().toJSON();
-			    $('#custom_products_logo_add_cart_button').attr('value', attachment.url);
+			    $('#cspw_custom_products_logo_add_cart_button').attr('value', attachment.url);
 			});
 	     
 			//Open the uploader dialog
