@@ -29,7 +29,7 @@ add_action( 'woocommerce_after_single_product_summary', function() {
 	if ( $tab_description != 1 ) {
 		echo '<div class="cspw-product-custom-descripton">';
 		echo '<h3>Descripción</h3>';
-		echo '<p>' . $product->description . '</p>';
+		echo '<p>' . esc_html__( $product->description, 'custom-single-product-wc' ) . '</p>';
 		echo '</div>';
 	}
 	if ( $tab_aditional != 1 ) {
@@ -52,7 +52,7 @@ add_action( 'woocommerce_after_single_product_summary', function() {
 						$reviews_title = sprintf( esc_html( _n( '%1$s review for %2$s', '%1$s reviews for %2$s', $count, 'woocommerce' ) ), esc_html( $count ), '<span>' . get_the_title() . '</span>' );
 						echo apply_filters( 'woocommerce_reviews_title', $reviews_title, $count, $product ); // WPCS: XSS ok.
 					} else {
-						echo '<h3>Valoraciones</h3>';
+						echo '<h3>' . esc_html__( 'Valoraciones', 'custom-single-product-wc' ) . '</h3>';
 					}
 					?>
 				</h2>
@@ -165,7 +165,7 @@ add_action( 'woocommerce_after_single_product_summary', function() {
 	}
 	if ( strlen($custom_new_tab) > 0 ) {
 		echo '<div class="cspw-product-custom-new-tab">';
-		echo '<h3>' . $custom_new_tab . '</h3>';
+		echo '<h3>' . esc_html__( $custom_new_tab, 'custom-single-product-wc' ) . '</h3>';
 		echo cspw_new_product_tab_content();
 		echo '</div>';
 	}

@@ -37,5 +37,5 @@ add_action( 'plugins_loaded', 'cspw_plugin_init' );
  * @return void
  */
 function cspw_plugin_init() {
-	load_plugin_textdomain( 'woocommerce', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+	load_plugin_textdomain( 'custom-single-product-wc', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 }

@@ -222,7 +222,7 @@ function cspw_change_product_price_display() {
 	}
 	$new_price = '<div class="cspw-product-container-price">' . $before_text . ' <p class="price">' . $product->get_price() . '</p> ' . $after_text . '</div>';
 	if ( strlen( $cspw_settings_custom_product['cspw_custom_price_before'] ) > 0 || strlen( $cspw_settings_custom_product['cspw_custom_price_after'] ) > 0 ) {
-		echo $new_price;
+		printf( esc_attr__( '%s', 'custom-single-product-wc' ), $new_price );
 	}
 	
 	
@@ -256,6 +256,6 @@ function cspw_new_product_tab_content() {
 	$cspw_settings_custom_product = get_option( 'cspw_settings_custom_product' );
 	$custom_new_tab_content       = isset( $cspw_settings_custom_product['cspw_custom_new_tab_content'] ) ? $cspw_settings_custom_product['cspw_custom_new_tab_content'] : 'true';
 	if ( $custom_new_tab_content != 'true' ) {
-		echo  $custom_new_tab_content;
+		printf( esc_html__( '%s', 'custom-single-product-wc' ), $custom_new_tab_content );
 	}
 }

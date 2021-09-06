@@ -100,7 +100,7 @@ function cspw_products_custom_button( $args ) {
 
 	$logo = '';
 	if ( strlen( $cspw_settings_custom_products['cspw_custom_products_logo_add_cart_button'] ) > 0 ) {
-		$logo = '<img class="cspw-products-button-logo" style="width:50px;heigth=50px;" src="' . $cspw_settings_custom_products['cspw_custom_products_logo_add_cart_button'] . '" />';
+		$logo = '<img class="cspw-products-button-logo" style="width:50px;heigth=50px;" src="' . esc_url( $cspw_settings_custom_products['cspw_custom_products_logo_add_cart_button'] ) . '" />';
 	}
 	$text = $product->add_to_cart_text();
 	if ( isset( $cspw_settings_custom_products['cspw_custom_products_button_text'] ) ) {
