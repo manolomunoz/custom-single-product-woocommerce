@@ -36,5 +36,6 @@ Manuel Muñoz Rodríguez <mmr010496@gmail.com>
 == Links ==
 *	[name](link_url)
 *	[Manuel Muñoz Rodríguez](https://www.linkedin.com/in/manuel-mu%C3%B1oz-1b78b4209/)
-*	[github](https://github.com/manolomunoz)
+*	[Github](https://github.com/manolomunoz)
+*	[WordPress](https://profiles.wordpress.org/manolomunoz/)
 
